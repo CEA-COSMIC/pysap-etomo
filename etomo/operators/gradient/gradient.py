@@ -41,7 +41,7 @@ class GradSynthesis(GradBasic, PowerMethod):
         self.data_op = data_op
         self.linear_op = linear_op
         coef = linear_op.op(np.zeros(data_op.shape).astype(float))
-        PowerMethod.__init__(self, self.trans_op_op, (np.prod(coef.shape),),
+        PowerMethod.__init__(self, self.trans_op_op, coef.shape,
                              data_type=float, auto_run=False)
         self.get_spec_rad(extra_factor=1.1)
 
