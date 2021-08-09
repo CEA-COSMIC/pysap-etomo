@@ -9,9 +9,7 @@
 
 """ This module defines the common operators.
 """
-from ..fourier.utils import generate_kspace_etomo_3D, \
-    generate_locations_etomo_3D, generate_kspace_etomo_2D, \
-    generate_locations_etomo_2D, generate_kspace_etomo_2D_SL, \
-    generate_locations_etomo_2D_SL 
-from ..linear.utils import flatten_swtn, unflatten_swtn, flatten_wave, \
-    unflatten_wave
+
+from .radon.radon import Radon2D, Radon3D
+from .gradient.gradient import GradAnalysis, GradSynthesis
+from .linear.linear import HOTV, HOTV_3D, WaveletPywt
