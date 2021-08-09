@@ -131,7 +131,7 @@ class LinearBase:
         return np.linalg.norm(data)
 
 
-class pyWavelet(LinearBase):
+class WaveletPywt(LinearBase):
     """ The 3D wavelet transform class from pyWavelets package"""
 
     def __init__(self, wavelet_name, nb_scale=4, undecimated=False,
