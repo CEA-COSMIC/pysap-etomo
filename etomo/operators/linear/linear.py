@@ -121,9 +121,8 @@ class LinearBase(LinearParent):
         if self.n_coils > 1:
             shape = shape[1:]
         shape = np.asarray(shape)
-        shape += shape % 2
         fake_data = np.zeros(shape)
-        np.put(fake_data, fake_data.size // 2, 1)
+        fake_data[0] = 1
 
         # Call mr_transform
         data = self._op(fake_data)
