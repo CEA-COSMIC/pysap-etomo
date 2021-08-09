@@ -82,6 +82,10 @@ class ReconstructorBase(object):
         self.grad_class = grad_class
         self.verbose = verbose
         self.extra_grad_args = extra_grad_args
+        self.cost_op = None
+        self.x_final = None
+        self.costs = None
+        self.metrics = None
         if regularizer_op is None:
             warnings.warn("The prox_op is not set. Setting to identity. "
                           "Note that optimization is just a gradient descent.")
@@ -142,9 +146,6 @@ class ReconstructorBase(object):
             optimizer_type = 'forward_backward'
         if cost_op_kwargs is None:
             cost_op_kwargs = {}
-        self.cost_op = costObj([self.gradient_op, self.prox_op],
-                               verbose=False,
-                               **cost_op_kwargs)
         self.cost_op = GenericCost(
             gradient_op=self.gradient_op,
             prox_op=self.prox_op,
