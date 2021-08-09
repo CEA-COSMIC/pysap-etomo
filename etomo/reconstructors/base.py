@@ -13,6 +13,7 @@ import warnings
 # Package import
 from ..operators.linear.linear import HOTV_3D, HOTV
 from ..optimizers import pogm, condatvu, fista
+from ..optimizers.utils.cost import GenericCost
 
 # Third party import
 from modopt.opt.linear import Identity
@@ -144,6 +145,14 @@ class ReconstructorBase(object):
         self.cost_op = costObj([self.gradient_op, self.prox_op],
                                verbose=False,
                                **cost_op_kwargs)
+        self.cost_op = GenericCost(
+            gradient_op=self.gradient_op,
+            prox_op=self.prox_op,
+            linear_op=self.linear_op,
+            verbose=self.verbose >= 20,
+            optimizer_type=optimizer_type,
+            **cost_op_kwargs,
+        )
         self.x_final, self.costs, *metrics = optimizer(
                 gradient_op=self.gradient_op,
                 linear_op=self.linear_op,
