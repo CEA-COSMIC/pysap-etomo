@@ -21,11 +21,11 @@ class GradAnalysis(GradBasic, PowerMethod):
     process in analysis formulation
     """
 
-    def __init__(self, data, fourier_op):
-        GradBasic.__init__(self, data, fourier_op.op, fourier_op.adj_op)
-        self.fourier_op = fourier_op
-        PowerMethod.__init__(self, self.trans_op_op, self.fourier_op.shape,
-                             data_type=complex, auto_run=False)
+    def __init__(self, data_op):
+        GradBasic.__init__(self, np.array(0), data_op.op, data_op.adj_op)
+        self.data_op = data_op
+        PowerMethod.__init__(self, self.trans_op_op, self.data_op.shape,
+                             data_type=float, auto_run=False)
         self.get_spec_rad(extra_factor=1.1)
 
 
@@ -35,19 +35,20 @@ class GradSynthesis(GradBasic, PowerMethod):
     process in synthesis formulation
     """
 
-    def __init__(self, data, linear_op, fourier_op):
-        GradBasic.__init__(self, data, self._op_method, self._trans_op_method)
-        self.fourier_op = fourier_op
+    def __init__(self, linear_op, data_op):
+        GradBasic.__init__(self, np.array(0), self._op_method,
+                           self._trans_op_method)
+        self.data_op = data_op
         self.linear_op = linear_op
-        coef = linear_op.op(np.zeros(fourier_op.shape).astype(complex))
-        PowerMethod.__init__(self, self.trans_op_op, coef.shape,
-                             data_type=complex, auto_run=False)
+        coef = linear_op.op(np.zeros(data_op.shape).astype(float))
+        PowerMethod.__init__(self, self.trans_op_op, (np.prod(coef.shape),),
+                             data_type=float, auto_run=False)
         self.get_spec_rad(extra_factor=1.1)
 
     def _op_method(self, data, *args, **kwargs):
         # pylint: disable=unused-argument
-        return self.fourier_op.op(self.linear_op.adj_op(data))
+        return self.data_op.op(self.linear_op.adj_op(data))
 
     def _trans_op_method(self, data, *args, **kwargs):
         # pylint: disable=unused-argument
-        return self.linear_op.op(self.fourier_op.adj_op(data))
+        return self.linear_op.op(self.data_op.adj_op(data))
