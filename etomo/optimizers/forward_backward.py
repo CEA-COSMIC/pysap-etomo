@@ -68,19 +68,19 @@ def fista(gradient_op, linear_op, prox_op, cost_op,
     # Define the initial primal and dual solutions
     if x_init is None:
         x_init = np.squeeze(np.zeros((gradient_op.linear_op.n_coils,
-                                      *gradient_op.fourier_op.shape),
-                                     dtype=np.complex))
+                                      *gradient_op.data_op.shape),
+                                     dtype=float))
     alpha_init = linear_op.op(x_init)
 
     # Welcome message
     if verbose > 0:
         print(" - mu: ", prox_op.weights)
         print(" - lipschitz constant: ", gradient_op.spec_rad)
-        print(" - data: ", gradient_op.fourier_op.shape)
+        print(" - data: ", gradient_op.data_op.shape)
         if hasattr(linear_op, "nb_scale"):
             print(" - wavelet: ", linear_op, "-", linear_op.nb_scale)
         print(" - max iterations: ", max_nb_of_iter)
-        print(" - image variable shape: ", gradient_op.fourier_op.shape)
+        print(" - image variable shape: ", gradient_op.data_op.shape)
         print(" - alpha variable shape: ", alpha_init.shape)
         print("-" * 40)
 
@@ -173,10 +173,10 @@ def pogm(gradient_op, linear_op, prox_op, cost_op=None,
     start = time.perf_counter()
 
     # Define the initial values
-    im_shape = (gradient_op.linear_op.n_coils, *gradient_op.fourier_op.shape)
+    im_shape = (gradient_op.linear_op.n_coils, *gradient_op.data_op.shape)
     if x_init is None:
         alpha_init = linear_op.op(np.squeeze(np.zeros(im_shape,
-                                                      dtype='complex128')))
+                                                      dtype=float)))
     else:
         alpha_init = linear_op.op(x_init)
 
@@ -184,7 +184,7 @@ def pogm(gradient_op, linear_op, prox_op, cost_op=None,
     if verbose > 0:
         print(" - mu: ", prox_op.weights)
         print(" - lipschitz constant: ", gradient_op.spec_rad)
-        print(" - data: ", gradient_op.fourier_op.shape)
+        print(" - data: ", gradient_op.data_op.shape)
         if hasattr(linear_op, "nb_scale"):
             print(" - wavelet: ", linear_op, "-", linear_op.nb_scale)
         print(" - max iterations: ", max_nb_of_iter)

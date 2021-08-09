@@ -20,13 +20,15 @@ from .utils.reweight import mReweight
 import numpy as np
 from modopt.math.stats import sigma_mad
 from modopt.opt.linear import Identity
+from modopt.opt.proximity import Positivity
 from modopt.opt.algorithms import Condat
 from modopt.opt.reweight import cwbReweight
 
 
 def condatvu(gradient_op, linear_op, dual_regularizer, cost_op,
              max_nb_of_iter=150, tau=None, sigma=None, relaxation_factor=1.0,
-             x_init=None, std_est=None, std_est_method=None, std_thr=2.,
+             x_init=None, add_positivity=True, std_est=None,
+             std_est_method=None, std_thr=2.,
              nb_of_reweights=1, metric_call_period=5, metrics={}, verbose=0):
     """ The Condat-Vu sparse reconstruction with reweightings.
 
@@ -95,8 +97,8 @@ def condatvu(gradient_op, linear_op, dual_regularizer, cost_op,
     # Define the initial primal and dual solutions
     if x_init is None:
         x_init = np.squeeze(np.zeros((linear_op.n_coils,
-                                      *gradient_op.fourier_op.shape),
-                                     dtype=np.complex))
+                                      *gradient_op.data_op.shape),
+                                     dtype=float))
     primal = x_init
     dual = linear_op.op(primal)
     weights = dual
@@ -131,7 +133,7 @@ def condatvu(gradient_op, linear_op, dual_regularizer, cost_op,
     norm = linear_op.l2norm(x_init.shape)
     lipschitz_cst = gradient_op.spec_rad
     if sigma is None:
-        sigma = 0.5
+        sigma = lipschitz_cst / (norm ** 2) / 2
     if tau is None:
         # to avoid numerics troubles with the convergence bound
         eps = 1.0e-8
@@ -149,7 +151,7 @@ def condatvu(gradient_op, linear_op, dual_regularizer, cost_op,
         print(" - rho: ", relaxation_factor)
         print(" - std: ", std_est)
         print(" - 1/tau - sigma||L||^2 >= beta/2: ", convergence_test)
-        print(" - data: ", gradient_op.fourier_op.shape)
+        print(" - data: ", gradient_op.data_op.shape)
         if hasattr(linear_op, "nb_scale"):
             print(" - wavelet: ", linear_op, "-", linear_op.nb_scale)
         print(" - max iterations: ", max_nb_of_iter)
@@ -158,7 +160,7 @@ def condatvu(gradient_op, linear_op, dual_regularizer, cost_op,
         print(" - dual variable shape: ", dual.shape)
         print("-" * 40)
 
-    prox_op = Identity()
+    prox_op = Positivity() if add_positivity else Identity()
 
     # Define the optimizer
     opt = Condat(
