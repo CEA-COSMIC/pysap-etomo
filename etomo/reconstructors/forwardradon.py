@@ -28,7 +28,7 @@ class RadonReconstructor(ReconstructorBase):
 
     Parameters
     ----------
-    radon_op: object of class Radon2D, Radon3D located in etomo.operators
+    data_op: object of class Radon2D, Radon3D located in etomo.operators
         Defines the Radon operator R in the above equation.
     linear_op: object, (optional, default None)
         Defines the linear sparsifying operator W. This must operate on x and
@@ -59,14 +59,14 @@ class RadonReconstructor(ReconstructorBase):
             the optimization turns to gradient descent.
     """
 
-    def __init__(self, radon_op, linear_op=None,
+    def __init__(self, data_op, linear_op=None,
                  gradient_formulation="synthesis", verbose=0, **kwargs):
         # Ensure that we are not in multichannel config
         if linear_op is None:
             # TODO change nb_scales to max_nb_scale - 1
             linear_op = WaveletN(
                 wavelet_name="sym8",
-                dim=len(radon_op.shape),
+                dim=len(data_op.shape),
                 nb_scale=3,
                 verbose=bool(verbose >= 30),
             )
@@ -75,7 +75,7 @@ class RadonReconstructor(ReconstructorBase):
         elif gradient_formulation == 'synthesis':
             grad_class = GradSynthesis
         super(RadonReconstructor, self).__init__(
-            radon_op=radon_op,
+            data_op=data_op,
             linear_op=linear_op,
             gradient_formulation=gradient_formulation,
             grad_class=grad_class,

@@ -13,10 +13,10 @@ import warnings
 # Package import
 from ..operators.linear.linear import HOTV_3D, HOTV
 from ..optimizers import pogm, condatvu, fista
-from ..optimizers.utils.cost import GenericCost
 
 # Third party import
 from modopt.opt.linear import Identity
+from modopt.opt.cost import costObj
 
 
 class ReconstructorBase(object):
@@ -34,9 +34,8 @@ class ReconstructorBase(object):
 
     Parameters
     ----------
-    fourier_op: object of class FFT, NonCartesianFFT or Stacked3DNFFT in
-    mri.operators
-        Defines the fourier operator F.
+    data_op: object of class NUFFT2, NUFFT3, Radon2D, Radon3D
+        Defines the data operator F.
     linear_op: object
         Defines the linear sparsifying operator W. This must operate on x and
         have 2 functions, op(x) and adj_op(coeff) which implements the
@@ -72,10 +71,10 @@ class ReconstructorBase(object):
         an extra arg
     """
 
-    def __init__(self, fourier_op, linear_op, regularizer_op,
+    def __init__(self, data_op, linear_op, regularizer_op,
                  gradient_formulation, grad_class, init_gradient_op=True,
                  verbose=0, **extra_grad_args):
-        self.fourier_op = fourier_op
+        self.data_op = data_op
         self.linear_op = linear_op
         self.prox_op = regularizer_op
         self.gradient_method = gradient_formulation
@@ -98,19 +97,18 @@ class ReconstructorBase(object):
     def initialize_gradient_op(self, **extra_args):
         # Initialize gradient operator and cost operators
         self.gradient_op = self.grad_class(
-            fourier_op=self.fourier_op,
-            verbose=self.verbose,
+            data_op=self.data_op,
             **extra_args,
         )
 
-    def reconstruct(self, kspace_data, optimization_alg='pogm',
+    def reconstruct(self, data, optimization_alg='pogm',
                     x_init=None, num_iterations=100, cost_op_kwargs=None,
                     **kwargs):
         """ This method calculates operator transform.
 
         Parameters
         ----------
-        kspace_data: np.ndarray
+        data: np.ndarray
             the acquired value in the Fourier domain.
             this is y in above equation.
         optimization_alg: str (optional, default 'pogm')
@@ -129,7 +127,7 @@ class ReconstructorBase(object):
             https://github.com/CEA-COSMIC/ModOpt/blob/master/\
             modopt/opt/algorithms.py
         """
-        self.gradient_op.obs_data = kspace_data
+        self.gradient_op.obs_data = data
         available_algorithms = ["condatvu", "fista", "pogm"]
         if optimization_alg not in available_algorithms:
             raise ValueError("The optimization_alg must be one of " +
@@ -143,13 +141,9 @@ class ReconstructorBase(object):
             optimizer_type = 'forward_backward'
         if cost_op_kwargs is None:
             cost_op_kwargs = {}
-        self.cost_op = GenericCost(
-            gradient_op=self.gradient_op,
-            prox_op=self.prox_op,
-            verbose=self.verbose >= 20,
-            optimizer_type=optimizer_type,
-            **cost_op_kwargs,
-        )
+        self.cost_op = costObj([self.gradient_op, self.prox_op],
+                               verbose=False,
+                               **cost_op_kwargs)
         self.x_final, self.costs, *metrics = optimizer(
                 gradient_op=self.gradient_op,
                 linear_op=self.linear_op,
