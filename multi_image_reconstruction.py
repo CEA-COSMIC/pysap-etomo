@@ -1,17 +1,16 @@
 """
 Example of multiple images reconstruction
 """
-from etomo.operators import Radon2D, WaveletPywt, HOTV
-from etomo.reconstructors.forwardradon import RadonReconstructor
+# Third party import
 import pysap
 from pysap.data import get_sample_data
-
-# Third party import
 from modopt.math.metrics import ssim
-from modopt.opt.linear import Identity
-from modopt.opt.proximity import SparseThreshold, GroupLASSO
+from modopt.opt.proximity import GroupLASSO
 import numpy as np
 import matplotlib.pyplot as plt
+
+from etomo.operators import Radon2D, WaveletPywt, HOTV
+from etomo.reconstructors.forwardradon import RadonReconstructor
 
 # Loading input data
 image = get_sample_data('2d-pmri')
@@ -24,8 +23,10 @@ radon_op = Radon2D(angles=theta, img_size=img_size, gpu=True,
 data = radon_op.op(image)
 
 # Create operators
-# linear_op = HOTV(img_shape=image[0].shape, order=1, n_channels=n_channels)
-linear_op = WaveletPywt(wavelet_name='sym8', nb_scale=3, n_channels=n_channels)
+TV = HOTV(img_shape=image[0].shape, order=1, n_channels=n_channels)
+wavelet = WaveletPywt(wavelet_name='sym8', nb_scale=3, n_channels=n_channels)
+linear_op = wavelet
+
 regularizer_op = GroupLASSO(weights=1e-7)
 reconstructor = RadonReconstructor(
     data_op=radon_op,
@@ -34,9 +35,10 @@ reconstructor = RadonReconstructor(
     gradient_formulation='synthesis',
 )
 
+# Run reconstruction
 x_final, cost, *_ = reconstructor.reconstruct(
     data=data,
-    optimization_alg='fista',
+    optimization_alg='pogm',
     num_iterations=200,
     cost_op_kwargs={'cost_interval': 5}
 )

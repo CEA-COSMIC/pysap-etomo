@@ -1,18 +1,17 @@
 """
 Example of a single image reconstruction
 """
-from etomo.operators import Radon2D, WaveletPywt, HOTV
-from etomo.reconstructors.forwardradon import RadonReconstructor
+# Third party import
 import pysap
 from pysap.data import get_sample_data
-
-# Third party import
 from modopt.math.metrics import ssim
 from modopt.opt.linear import Identity
 from modopt.opt.proximity import SparseThreshold
 import numpy as np
 import matplotlib.pyplot as plt
 
+from etomo.operators import Radon2D, WaveletPywt, HOTV
+from etomo.reconstructors.forwardradon import RadonReconstructor
 
 # Loading input data
 image = get_sample_data('2d-mri')
@@ -23,10 +22,13 @@ theta = np.arange(0., 180., 3.)
 radon_op = Radon2D(angles=theta, img_size=img_size, gpu=True)
 data = radon_op.op(image)
 
-# Create operators
-# linear_op = HOTV(img_shape=image.shape, order=1)
-linear_op = WaveletPywt(wavelet_name='sym8', nb_scale=3)
-regularizer_op = SparseThreshold(linear=linear_op, weights=3e-6)
+# Create operators: we give Identity to SparseThreshold as the inputs it will
+# be given will already be in the linear operator's image space
+TV = HOTV(img_shape=image.shape, order=1)
+wavelet = WaveletPywt(wavelet_name='sym8', nb_scale=3)
+linear_op = wavelet
+
+regularizer_op = SparseThreshold(linear=Identity(), weights=2e-6)
 reconstructor = RadonReconstructor(
     data_op=radon_op,
     linear_op=linear_op,
@@ -34,10 +36,11 @@ reconstructor = RadonReconstructor(
     gradient_formulation='analysis',
 )
 
+# Run reconstruction
 x_final, cost, *_ = reconstructor.reconstruct(
     data=data,
     optimization_alg='condatvu',
-    num_iterations=200,
+    num_iterations=300,
     cost_op_kwargs={'cost_interval': 5}
 )
 
