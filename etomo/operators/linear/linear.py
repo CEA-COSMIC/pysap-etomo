@@ -44,7 +44,6 @@ class LinearBase(LinearParent):
         verbose: bool
             Verbosity level
         """
-        super().__init__(self._op, self._adj_op)
         self.n_jobs = n_jobs
         self.backend = backend
         self.verbose = verbose
