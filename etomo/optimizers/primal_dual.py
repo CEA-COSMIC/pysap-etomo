@@ -29,7 +29,8 @@ def condatvu(gradient_op, linear_op, dual_regularizer, cost_op,
              max_nb_of_iter=150, tau=None, sigma=None, relaxation_factor=1.0,
              x_init=None, add_positivity=True, std_est=None,
              std_est_method=None, std_thr=2.,
-             nb_of_reweights=1, metric_call_period=5, metrics={}, verbose=0):
+             nb_of_reweights=1, metric_call_period=5, metrics={}, verbose=0,
+             progress=True):
     """ The Condat-Vu sparse reconstruction with reweightings.
 
     Parameters
@@ -54,6 +55,8 @@ def condatvu(gradient_op, linear_op, dual_regularizer, cost_op,
         If 1, no relaxation.
     x_init: np.ndarray (optional, default None)
         the initial guess of image
+    add_positivity: bool, default True
+        use Positivity instead of Identity for prox
     std_est: float, default None
         the noise std estimate.
         If None use the MAD as a consistent estimator for the std.
@@ -76,6 +79,8 @@ def condatvu(gradient_op, linear_op, dual_regularizer, cost_op,
         [@metric, metric_parameter]}. See modopt for the metrics API.
     verbose: int, default 0
         the verbosity level.
+    progress: bool, default True
+        triggers progressbar
 
     Returns
     -------
@@ -179,7 +184,9 @@ def condatvu(gradient_op, linear_op, dual_regularizer, cost_op,
         tau_update=None,
         auto_iterate=False,
         metric_call_period=metric_call_period,
-        metrics=metrics)
+        metrics=metrics,
+        progress=progress,
+    )
     cost_op = opt._cost_func
 
     # Perform the first reconstruction
