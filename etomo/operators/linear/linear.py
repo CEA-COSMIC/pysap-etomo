@@ -13,12 +13,11 @@ import numpy as np
 import pywt
 import scipy
 from joblib import Parallel, delayed
-from modopt.opt.linear import LinearParent
 
 from .utils import (flatten_swtn, unflatten_swtn, flatten_wave, unflatten_wave)
 
 
-class LinearBase(LinearParent):
+class LinearBase:
     """
     Creates a base class for all linear operators. Ensures that the operator
     is defined in a way that is compatible with modopt reconstruction
@@ -401,103 +400,3 @@ class HOTV_3D(LinearBase):
 
     def __str__(self):
         return ('HOTV order ' + str(self.order))
-
-
-class LinearCombo(LinearBase):
-    """
-    Wraps several linear operators in a single operator to use it in
-    reconstructions
-
-    Examples
-    --------
-    With PyETomo's linear operators:
-
-    >>> haar = linear.pyWavelet('haar', nb_scale=3)
-    >>> HOTV = linear.HOTV(phantom.shape, order=3)
-    >>> combo = linear.LinearCombo(image.shape, (haar, 0.8), (HOTV, 0.2))
-
-    Notes
-    -----
-    This class is used to solve reconstruction with several linear operators,
-    but all of them will have the same regularization and this regularization
-    should furthermore be applied coefficient by coefficient (for instance L1
-    or squared L2 norm) for the reconstruction to be meaningful.
-
-    It is not mandatory but recommended to have a sum of weights equal to 1
-    to control the relative importance of each linear operator and then
-    control the intensity of the penalty function with the regularization
-    parameter in the reconstruction.
-    """
-
-    def __init__(self, img_shape, *args, **kwargs):
-        """
-        Creates the operator
-
-        Parameters
-        ----------
-        img_shape: tuple
-            shape of the data
-        args: tuples (linear_op, weight)
-            linear operators to be used and associated weight.
-            Weights should sum to 1 to ensure a good convergence speed in
-            modopt algorithms.
-        kwargs:
-            Keyword arguments for LinearBase initialization
-        """
-        super().__init__(**kwargs)
-        self.img_shape = img_shape
-        self.operators = args
-        self.adj_indices = None
-        self._create_indices()
-
-    def _create_indices(self):
-        """
-        Creates a list of indices used for adjoint operator computations
-        """
-        self.adj_indices = [0]
-        for (linear_op, _) in self.operators:
-            self.adj_indices.append(self.adj_indices[-1] +
-                                    np.prod(linear_op._op(np.zeros(
-                                        self.img_shape)).shape))
-
-    def _op(self, data):
-        """
-        Direct operator
-
-        Parameters
-        ----------
-        data: np.ndarray
-            Input image
-
-        Returns
-        -------
-        coeffs: np.ndarray
-            weighted results of operators
-        """
-        return np.concatenate([weight * linear_op._op(data) for (linear_op,
-                                                                 weight) in
-                               self.operators])
-
-    def _adj_op(self, coeffs):
-        """
-        Adjoint operator
-
-        Parameters
-        ----------
-        coeffs: np.ndarray
-            Adjoint data
-
-        Returns
-        -------
-        img: np.ndarray
-            The reconstructed image
-        """
-        return np.sum([weight * linear_op._adj_op(coeffs[self.adj_indices[i]:
-                                                         self.adj_indices[i +
-                                                                          1]])
-                       for i, (linear_op, weight) in enumerate(
-                self.operators)], axis=0)
-
-    def __str__(self):
-        return ('Combination of:\n\t- ' + '\n\t- '.join([x[0].__str__() for x in
-                                                         self.operators]))
