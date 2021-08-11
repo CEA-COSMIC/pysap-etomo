@@ -10,17 +10,15 @@
 # System import
 import warnings
 
-# Package import
-from ..operators.linear.linear import HOTV_3D, HOTV
-from ..optimizers import pogm, condatvu, fista
-from ..optimizers.utils.cost import GenericCost
-
 # Third party import
 from modopt.opt.linear import Identity
-from modopt.opt.cost import costObj
+
+# Package import
+from ..optimizers.utils.cost import GenericCost
+from ..optimizers import condatvu, pogm, fista
 
 
-class ReconstructorBase(object):
+class ReconstructorBase:
     """ This is the base reconstructor class for reconstruction.
     This class holds some parameters that are common for all MR Image
     reconstructors.
@@ -84,6 +82,7 @@ class ReconstructorBase(object):
         self.extra_grad_args = extra_grad_args
         self.cost_op = None
         self.x_final = None
+        self.y_final = None
         self.costs = None
         self.metrics = None
         if regularizer_op is None:
@@ -100,7 +99,18 @@ class ReconstructorBase(object):
             self.initialize_gradient_op(**self.extra_grad_args)
 
     def initialize_gradient_op(self, **extra_args):
-        # Initialize gradient operator and cost operators
+        """
+        Initialize gradient operator and cost operators
+
+        Parameters
+        ----------
+        extra_args:
+            kwargs for GradAnalysis or GradSynthesis
+
+        Returns
+        -------
+        None
+        """
         self.gradient_op = self.grad_class(
             data_op=self.data_op,
             **extra_args,

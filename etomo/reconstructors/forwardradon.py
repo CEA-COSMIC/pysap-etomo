@@ -12,7 +12,7 @@ This implements the single image reconstruction using a Radon forward model.
 """
 
 from .base import ReconstructorBase
-from ..operators import GradSynthesis, GradAnalysis, HOTV, HOTV_3D
+from ..operators import GradSynthesis, GradAnalysis, WaveletPywt
 
 
 class RadonReconstructor(ReconstructorBase):
@@ -64,17 +64,15 @@ class RadonReconstructor(ReconstructorBase):
         # Ensure that we are not in multichannel config
         if linear_op is None:
             # TODO change nb_scales to max_nb_scale - 1
-            linear_op = WaveletN(
+            linear_op = WaveletPywt(
                 wavelet_name="sym8",
-                dim=len(data_op.shape),
                 nb_scale=3,
-                verbose=bool(verbose >= 30),
             )
         if gradient_formulation == 'analysis':
             grad_class = GradAnalysis
         elif gradient_formulation == 'synthesis':
             grad_class = GradSynthesis
-        super(RadonReconstructor, self).__init__(
+        super().__init__(
             data_op=data_op,
             linear_op=linear_op,
             gradient_formulation=gradient_formulation,
