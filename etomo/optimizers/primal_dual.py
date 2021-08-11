@@ -13,9 +13,6 @@
 # System import
 import time
 
-# Package import
-from .utils.reweight import mReweight
-
 # Third party import
 import numpy as np
 from modopt.math.stats import sigma_mad
@@ -24,12 +21,15 @@ from modopt.opt.proximity import Positivity
 from modopt.opt.algorithms import Condat
 from modopt.opt.reweight import cwbReweight
 
+# Package import
+from .utils.reweight import mReweight
+
 
 def condatvu(gradient_op, linear_op, dual_regularizer, cost_op,
              max_nb_of_iter=150, tau=None, sigma=None, relaxation_factor=1.0,
              x_init=None, add_positivity=True, std_est=None,
              std_est_method=None, std_thr=2.,
-             nb_of_reweights=1, metric_call_period=5, metrics={}, verbose=0,
+             nb_of_reweights=1, metric_call_period=5, metrics=None, verbose=0,
              progress=True):
     """ The Condat-Vu sparse reconstruction with reweightings.
 

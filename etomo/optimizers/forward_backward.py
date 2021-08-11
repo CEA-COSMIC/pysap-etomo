@@ -22,7 +22,7 @@ from modopt.opt.algorithms import ForwardBackward, POGM
 
 def fista(gradient_op, linear_op, prox_op, cost_op,
           lambda_init=1.0, max_nb_of_iter=300, x_init=None,
-          metric_call_period=5, metrics={},
+          metric_call_period=5, metrics=None,
           verbose=0, progress=True, **lambda_update_params):
     """ The FISTA sparse reconstruction
 
@@ -133,7 +133,7 @@ def fista(gradient_op, linear_op, prox_op, cost_op,
 
 def pogm(gradient_op, linear_op, prox_op, cost_op=None,
          max_nb_of_iter=300, x_init=None, metric_call_period=5,
-         sigma_bar=0.96, metrics={}, verbose=0, progress=True):
+         sigma_bar=0.96, metrics=None, verbose=0, progress=True):
     """
     Perform sparse reconstruction using the POGM algorithm.
 
