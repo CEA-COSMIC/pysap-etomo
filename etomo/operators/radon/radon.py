@@ -92,7 +92,7 @@ class Radon2D(RadonBase):
         """
         Computes sino of single image
         """
-        return astra.create_sino(data=np.real(img), proj_id=self.proj_id)[1] \
+        return astra.create_sino(data=np.array(img), proj_id=self.proj_id)[1] \
                / self.norm_const
 
     def op(self, img):
@@ -132,7 +132,7 @@ class Radon2D(RadonBase):
         """
         Computes backprojection of single set of coefficients
         """
-        return astra.creators.create_backprojection(data=np.real(x),
+        return astra.creators.create_backprojection(data=np.array(x),
                                                     proj_id=self.proj_id)[1] \
                / self.norm_const
 
@@ -212,7 +212,7 @@ class Radon3D(RadonBase):
         """
         Computes sino of a single image
         """
-        return self.sino(data=np.real(img), proj_geom=self.proj_geom,
+        return self.sino(data=np.array(img), proj_geom=self.proj_geom,
                          vol_geom=self.vol_geom)[1] / self.norm_const
 
     def op(self, img):
@@ -240,7 +240,7 @@ class Radon3D(RadonBase):
         """
         Computes back projection of single set of coefficients
         """
-        return self.back_projection(data=np.real(x),
+        return self.back_projection(data=np.array(x),
                                     proj_geom=self.proj_geom,
                                     vol_geom=self.vol_geom)[1] / self.norm_const
 
