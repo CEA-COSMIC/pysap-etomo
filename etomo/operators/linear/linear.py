@@ -13,11 +13,12 @@ import numpy as np
 import pywt
 import scipy
 from joblib import Parallel, delayed
+from modopt.opt.linear import LinearParent
 
 from .utils import (flatten_swtn, unflatten_swtn, flatten_wave, unflatten_wave)
 
 
-class LinearBase:
+class LinearBase(LinearParent):
     """
     Creates a base class for all linear operators. Ensures that the operator
     is defined in a way that is compatible with modopt reconstruction
@@ -43,6 +44,7 @@ class LinearBase:
         verbose: bool
             Verbosity level
         """
+        super().__init__(self._op, self._adj_op)
         self.n_jobs = n_jobs
         self.backend = backend
         self.verbose = verbose
