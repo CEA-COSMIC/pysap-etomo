@@ -1,7 +1,6 @@
 """
 Radon operator based on Astra Toolbox
 """
-import sys
 import numpy as np
 from joblib import Parallel, delayed
 
