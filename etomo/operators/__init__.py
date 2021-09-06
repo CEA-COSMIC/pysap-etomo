@@ -12,4 +12,4 @@
 
 from .radon.radon import Radon2D, Radon3D
 from .gradient.gradient import GradAnalysis, GradSynthesis
-from .linear.linear import HOTV, HOTV_3D, WaveletPywt
+from .linear import HOTV, HOTV_3D, WaveletPywt
