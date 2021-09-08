@@ -2,7 +2,7 @@
 PySAP plugin for electron tomography 
 
 # Special installation
-Astra-toolbox is required: https://www.astra-toolbox.com/docs/install.html
+On top of the packages required for pysap, astra-toolbox is needed for this plugin: https://www.astra-toolbox.com/docs/install.html
 
 # PySAP repository
 https://github.com/CEA-COSMIC/pysap
