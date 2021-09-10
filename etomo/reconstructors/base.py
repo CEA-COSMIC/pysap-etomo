@@ -20,26 +20,23 @@ from ..optimizers import condatvu, pogm, fista
 
 class ReconstructorBase:
     """ This is the base reconstructor class for reconstruction.
-    This class holds some parameters that are common for all MR Image
-    reconstructors.
 
     Notes
     -----
         For the Analysis case, finds the solution  for x of:
-        ..math:: (1/2) * ||F x - y||^2_2 + mu * H (W x)
+        ..math:: (1/2) * ||R x - y||^2_2 + mu * H (W x)
 
         For the Synthesis case, finds the solution of:
-        ..math:: (1/2) * ||F Wt alpha - y||^2_2 + mu * H(alpha)
+        ..math:: (1/2) * ||R Wt alpha - y||^2_2 + mu * H(alpha)
 
     Parameters
     ----------
-    data_op: object of class NUFFT2, NUFFT3, Radon2D, Radon3D
-        Defines the data operator F.
-    linear_op: object
+    data_op: object of class Radon2D, Radon3D
+        Defines the radon data operator R.
+    linear_op: object of class LinearBase
         Defines the linear sparsifying operator W. This must operate on x and
-        have 2 functions, op(x) and adj_op(coeff) which implements the
-        operator and adjoint operator. For wavelets, this can be object of
-        class WaveletN or WaveletUD2 from mri.operators
+        have 2 functions, op(x) and adj_op(coeff) which implements the direct
+        adjoint operators.
     regularizer_op: operator, (optional default None)
         Defines the regularization operator for the regularization function H.
         If None, the  regularization chosen is Identity and the optimization
@@ -47,9 +44,8 @@ class ReconstructorBase:
     gradient_formulation: str between 'analysis' or 'synthesis',
         default 'synthesis'
         defines the formulation of the image model which defines the gradient.
-    grad_class: Gradient class from mri.operators.
-        Points to the gradient class based on the MR Image model and
-        gradient_formulation.
+    grad_class: Gradient class from operators.gradient.
+        Points to the gradient class based on the gradient_formulation.
     init_gradient_op: bool, default True
         This parameter controls whether the gradient operator must be
         initialized right now.
@@ -65,7 +61,7 @@ class ReconstructorBase:
     extra_grad_args: Extra Keyword arguments for gradient initialization
         This holds the initialization parameters used for gradient
         initialization which is obtained from 'grad_class'.
-        Please refer to mri.operators.gradient.base for reference.
+        Please refer to operators.gradient.base for reference.
         In case of sythesis formulation, the 'linear_op' is also passed as
         an extra arg
     """
@@ -124,8 +120,7 @@ class ReconstructorBase:
         Parameters
         ----------
         data: np.ndarray
-            the acquired value in the Fourier domain.
-            this is y in above equation.
+            The acquired value in the data domain. This is y in above equation.
         optimization_alg: str (optional, default 'pogm')
             Type of optimization algorithm to use, 'pogm' | 'fista' |
             'condatvu'
