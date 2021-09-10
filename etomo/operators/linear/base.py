@@ -11,7 +11,7 @@ class LinearBase(LinearParent):
     Creates a base class for all linear operators. Ensures that the operator
     is defined in a way that is compatible with modopt reconstruction
     algorithms and handles multithreading for multichannel reconstructions.
-    Any linear operator in pytetomo should inherit from this class. To create
+    Any linear operator in pysap-etomo inherits from this class. To create
     an operator based on this class, the direct and adjoint operators have to
     be implemented in the _op and _adj_op methods respectively.
     """
@@ -49,7 +49,7 @@ class LinearBase(LinearParent):
 
         Parameters
         ----------
-        data: np.ndarray of size ((n_channels,) (nb_proj,) img_size, img_size)
+        data: np.ndarray of size ((n_channels,) (img_size,) img_size, img_size)
             2D or 3D images to compute operator on.
 
         Returns
