@@ -74,7 +74,7 @@ class GenericCost(costObj):
     """ Define the Generic cost function, based on the cost function of the
     gradient operator and the cost function of the proximity operator.
     """
-    def __init__(self, gradient_op, prox_op, initial_cost=1e6,
+    def __init__(self, gradient_op, prox_op, linear_op, initial_cost=1e6,
                  tolerance=1e-4, cost_interval=None, test_range=4,
                  optimizer_type='forward_backward',
                  verbose=False, plot_output=None):
@@ -122,6 +122,7 @@ class GenericCost(costObj):
                                " `cost` function")
         self.gradient_op = gradient_op
         self.prox_op = prox_op
+        self.linear_op = linear_op
         self.optimizer_type = optimizer_type
 
         super(GenericCost, self).__init__(
@@ -148,5 +149,6 @@ class GenericCost(costObj):
             # In primal dual algorithm, the value of args[0] is the data in
             # Wavelet Space, while x_new is data in Image space.
             # TODO, we need to generalize this
-            cost = self.gradient_op.cost(x_new) + self.prox_op.cost(args[0])
+            cost = self.gradient_op.cost(x_new) + \
+                   self.prox_op.cost(self.linear_op.op(x_new))
         return cost

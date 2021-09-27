@@ -12,7 +12,7 @@ This implements the single image reconstruction using a Radon forward model.
 """
 
 from .base import ReconstructorBase
-from ..operators import GradSynthesis, GradAnalysis, HOTV, HOTV_3D
+from ..operators import GradSynthesis, GradAnalysis, WaveletPywt
 
 
 class RadonReconstructor(ReconstructorBase):
@@ -28,7 +28,7 @@ class RadonReconstructor(ReconstructorBase):
 
     Parameters
     ----------
-    radon_op: object of class Radon2D, Radon3D located in etomo.operators
+    data_op: object of class Radon2D, Radon3D located in etomo.operators
         Defines the Radon operator R in the above equation.
     linear_op: object, (optional, default None)
         Defines the linear sparsifying operator W. This must operate on x and
@@ -59,23 +59,21 @@ class RadonReconstructor(ReconstructorBase):
             the optimization turns to gradient descent.
     """
 
-    def __init__(self, radon_op, linear_op=None,
+    def __init__(self, data_op, linear_op=None,
                  gradient_formulation="synthesis", verbose=0, **kwargs):
         # Ensure that we are not in multichannel config
         if linear_op is None:
             # TODO change nb_scales to max_nb_scale - 1
-            linear_op = WaveletN(
+            linear_op = WaveletPywt(
                 wavelet_name="sym8",
-                dim=len(radon_op.shape),
                 nb_scale=3,
-                verbose=bool(verbose >= 30),
             )
         if gradient_formulation == 'analysis':
             grad_class = GradAnalysis
         elif gradient_formulation == 'synthesis':
             grad_class = GradSynthesis
-        super(RadonReconstructor, self).__init__(
-            radon_op=radon_op,
+        super().__init__(
+            data_op=data_op,
             linear_op=linear_op,
             gradient_formulation=gradient_formulation,
             grad_class=grad_class,
