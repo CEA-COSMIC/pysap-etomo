@@ -22,10 +22,9 @@ for compressed sensing tomographic reconstruction using gradient-based and wavel
 regularizations.
 It was developed in the context of an interdisciplinary project involving CEA-Leti
 (Martin Jacob, Jyh-Miin Lin, Guillaume Biagi, Zineb Saghi), CEA-NeuroSpin
-(Loubna El Gueddari, Philippe Ciuciu) and CEA-CosmoStat (Samuel Farrens,
-  Jean-Luc Starck). We acknowledge the financial support of the Cross-Disciplinary
-  Program on Numerical Simulation of CEA, the French Alternative Energies and
-  Atomic Energy Commission.
+(Loubna El Gueddari, Philippe Ciuciu) and CEA-CosmoStat (Samuel Farrens, Jean-Luc Starck).
+We acknowledge the financial support of the Cross-Disciplinary Program on Numerical Simulation of CEA,
+the French Alternative Energies and Atomic Energy Commission.
 
 The current version of pysap-etomo contains 2D and 3D implementations of:
 
