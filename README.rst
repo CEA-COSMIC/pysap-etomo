@@ -57,6 +57,7 @@ Special Installations
 
 For Radon operators in 2D/3D (both CPU & GPU implementations
 `astratoolbox <https://www.astra-toolbox.com/>`_
+
 -------------------------------------------------------------------
 
 Linux/Mac:
