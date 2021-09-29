@@ -63,7 +63,7 @@ requires prior installation of the CUDA toolkit)
 Linux/Mac:
 ``````````
 
-`` git clone github: https://github.com/astra-toolbox/astra-toolbox``
+``git clone github: https://github.com/astra-toolbox/astra-toolbox``
 
 ``cd build/linux
 ./autogen.sh   # when building a git version
