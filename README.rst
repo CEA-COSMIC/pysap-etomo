@@ -55,10 +55,9 @@ following command:
 Special Installations
 =====================
 
-For Radon operators in 2D/3D (both CPU & GPU implementations, the latter
-requires prior installation of the CUDA toolkit)
+For Radon operators in 2D/3D (both CPU & GPU implementations
 `astratoolbox <https://www.astra-toolbox.com/>`_
------------------------------------------------
+-------------------------------------------------------------------
 
 Linux/Mac:
 ``````````
