@@ -15,7 +15,7 @@
 pySAP-etomo
 ===========
 
-Python Sparse data Analysis Package external electron tomography~(etomo) plugin.
+Python Sparse data Analysis Package external electron tomography (etomo) plugin.
 
 Pysap-etomo is a plugin of the open-source Python library called PySAP (https://github.com/cea-cosmic/pySAP)
 for compressed sensing tomographic reconstruction using gradient-based and wavelet-based
