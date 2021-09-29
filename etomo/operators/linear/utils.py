@@ -10,7 +10,6 @@
 This module contains usefull methods for electron tomography applications.
 """
 import numpy as np
-import scipy.fftpack as pfft
 import matplotlib.pyplot as plt
 
 

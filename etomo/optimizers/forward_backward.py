@@ -22,8 +22,8 @@ from modopt.opt.algorithms import ForwardBackward, POGM
 
 def fista(gradient_op, linear_op, prox_op, cost_op,
           lambda_init=1.0, max_nb_of_iter=300, x_init=None,
-          metric_call_period=5, metrics={},
-          verbose=0, **lambda_update_params):
+          metric_call_period=5, metrics=None,
+          verbose=0, progress=True, **lambda_update_params):
     """ The FISTA sparse reconstruction
 
     Parameters
@@ -51,6 +51,8 @@ def fista(gradient_op, linear_op, prox_op, cost_op,
         [@metric, metric_parameter]}. See modopt for the metrics API.
     verbose: int (optional, default 0)
         the verbosity level.
+    progress: bool, default True
+        triggers progressbar
     lambda_update_params: dict,
         Parameters for the lambda update in FISTA mode
 
@@ -67,20 +69,18 @@ def fista(gradient_op, linear_op, prox_op, cost_op,
 
     # Define the initial primal and dual solutions
     if x_init is None:
-        x_init = np.squeeze(np.zeros((gradient_op.linear_op.n_coils,
-                                      *gradient_op.fourier_op.shape),
-                                     dtype=np.complex))
+        x_init = np.zeros(gradient_op.data_op.shape, dtype=float)
     alpha_init = linear_op.op(x_init)
 
     # Welcome message
     if verbose > 0:
         print(" - mu: ", prox_op.weights)
         print(" - lipschitz constant: ", gradient_op.spec_rad)
-        print(" - data: ", gradient_op.fourier_op.shape)
+        print(" - data: ", gradient_op.data_op.shape)
         if hasattr(linear_op, "nb_scale"):
             print(" - wavelet: ", linear_op, "-", linear_op.nb_scale)
         print(" - max iterations: ", max_nb_of_iter)
-        print(" - image variable shape: ", gradient_op.fourier_op.shape)
+        print(" - image variable shape: ", gradient_op.data_op.shape)
         print(" - alpha variable shape: ", alpha_init.shape)
         print("-" * 40)
 
@@ -104,6 +104,7 @@ def fista(gradient_op, linear_op, prox_op, cost_op,
         linear=linear_op,
         lambda_param=lambda_init,
         beta_param=beta_param,
+        progress=progress,
         **lambda_update_params)
     cost_op = opt._cost_func
 
@@ -132,7 +133,7 @@ def fista(gradient_op, linear_op, prox_op, cost_op,
 
 def pogm(gradient_op, linear_op, prox_op, cost_op=None,
          max_nb_of_iter=300, x_init=None, metric_call_period=5,
-         sigma_bar=0.96, metrics={}, verbose=0):
+         sigma_bar=0.96, metrics=None, verbose=0, progress=True):
     """
     Perform sparse reconstruction using the POGM algorithm.
 
@@ -160,6 +161,8 @@ def pogm(gradient_op, linear_op, prox_op, cost_op=None,
         [@metric, metric_parameter]}. See modopt for the metrics API.
     verbose: int (optional, default 0)
         the verbosity level.
+    progress: bool, default True
+        triggers progressbar
 
     Returns
     -------
@@ -173,10 +176,10 @@ def pogm(gradient_op, linear_op, prox_op, cost_op=None,
     start = time.perf_counter()
 
     # Define the initial values
-    im_shape = (gradient_op.linear_op.n_coils, *gradient_op.fourier_op.shape)
+    im_shape = gradient_op.data_op.shape
     if x_init is None:
         alpha_init = linear_op.op(np.squeeze(np.zeros(im_shape,
-                                                      dtype='complex128')))
+                                                      dtype=float)))
     else:
         alpha_init = linear_op.op(x_init)
 
@@ -184,7 +187,7 @@ def pogm(gradient_op, linear_op, prox_op, cost_op=None,
     if verbose > 0:
         print(" - mu: ", prox_op.weights)
         print(" - lipschitz constant: ", gradient_op.spec_rad)
-        print(" - data: ", gradient_op.fourier_op.shape)
+        print(" - data: ", gradient_op.data_op.shape)
         if hasattr(linear_op, "nb_scale"):
             print(" - wavelet: ", linear_op, "-", linear_op.nb_scale)
         print(" - max iterations: ", max_nb_of_iter)
@@ -208,6 +211,7 @@ def pogm(gradient_op, linear_op, prox_op, cost_op=None,
         metric_call_period=metric_call_period,
         metrics=metrics,
         auto_iterate=False,
+        progress=progress,
     )
 
     # Perform the reconstruction
