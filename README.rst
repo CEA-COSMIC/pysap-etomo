@@ -65,13 +65,13 @@ Linux/Mac:
 
 ``git clone github: https://github.com/astra-toolbox/astra-toolbox``
 
-``cd build/linux \
-./autogen.sh   # when building a git version \
-./configure --with-cuda=/usr/local/cuda \
-            --with-python \
-            --with-install-type=module
-make \
-make install``
+``cd build/linux ``
+``./autogen.sh   # when building a git version``
+``./configure --with-cuda=/usr/local/cuda --with-python --with-install-type=module``
+
+``make``
+
+``make install``
 
 Windows:
 ````````
