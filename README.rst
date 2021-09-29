@@ -12,8 +12,8 @@
 .. |CircleCI| image:: https://circleci.com/gh/CEA-COSMIC/pysap-etomo.svg?style=svg
 .. _CircleCI: https://circleci.com/gh/CEA-COSMIC/pysap-etomo
 
-pySAP-mri
-=========
+pySAP-etomo
+===========
 
 Python Sparse data Analysis Package external electron tomography~(etomo) plugin.
 
