@@ -70,6 +70,7 @@ class Radon2D(RadonBase):
         gpu: bool, default False
             use cuda implementation if True
         """
+        self.dtype = float
         self.n_coils = n_channels
         self.img_size = img_size
         self.shape = (img_size,) * 2
@@ -190,6 +191,7 @@ class Radon3D(RadonBase):
         normalized: bool, default True
             tells if the operator is normalized or not.
         """
+        self.dtype = float
         self.n_coils = n_channels
         self.img_size = img_size
         self.shape = (img_size,) * 3
