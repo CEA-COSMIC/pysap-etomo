@@ -308,6 +308,6 @@ class gpuNUFFT(FourierBase):
         image = self.operator.adj_op(coeff, grid_data)
 
         image = np.squeeze(image).T
-        # The recieved data from gpuNUFFT is num_channels x Nx x Ny x Nz,
+        # The received data from gpuNUFFT is num_channels x Nx x Ny x Nz,
         # hence we use squeeze
         return np.squeeze(image)

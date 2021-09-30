@@ -7,7 +7,7 @@ import scipy.fftpack as pfft
 
 def generate_locations_etomo_2D(size_x, angles):
     """
-    This function generate the list of the samples coordinate in the k-space.
+    This function generates the list of the samples coordinate in the k-space.
 
     Parameters
     ----------
@@ -31,15 +31,14 @@ def generate_locations_etomo_2D(size_x, angles):
         if t == 0:
             samples = sample
         else:
-            samples = np.concatenate([samples, sample])
-        samples = np.asarray(samples)
+            samples = np.concatenate([samples, sample], axis=0)
 
     return samples
 
 
 def generate_kspace_etomo_2D(sinogram):
     """
-    This function generate the list of the kspace observations.
+    This function generates the list of the kspace observations.
 
     Parameters
     ----------
@@ -54,7 +53,7 @@ def generate_kspace_etomo_2D(sinogram):
     nb_angles, size_x = sinogram.shape
     diag_x = int(np.floor(np.sqrt(2) * size_x))
     jmin = int(np.floor((np.floor(np.sqrt(2) * size_x) - size_x) / 2))
-    jmax = -int(np.ceil((np.floor(np.sqrt(2) * size_x) - size_x) / 2))
+    jmax = int(np.ceil((size_x - np.floor(np.sqrt(2) * size_x)) / 2))
     sinograms_zp = np.zeros((nb_angles, diag_x))
     sinograms_zp[:, jmin:jmax] = sinogram
 
