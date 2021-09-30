@@ -25,7 +25,7 @@ class GradAnalysis(GradBasic, PowerMethod):
         GradBasic.__init__(self, np.array(0), data_op.op, data_op.adj_op)
         self.data_op = data_op
         PowerMethod.__init__(self, self.trans_op_op, self.data_op.shape,
-                             data_type=float, auto_run=False)
+                             data_type=data_op.dtype, auto_run=False)
         self.get_spec_rad(extra_factor=1.1)
 
 
@@ -40,9 +40,9 @@ class GradSynthesis(GradBasic, PowerMethod):
                            self._trans_op_method)
         self.data_op = data_op
         self.linear_op = linear_op
-        coef = linear_op.op(np.zeros(data_op.shape).astype(float))
+        coef = linear_op.op(np.zeros(data_op.shape).astype(data_op.dtype))
         PowerMethod.__init__(self, self.trans_op_op, coef.shape,
-                             data_type=float, auto_run=False)
+                             data_type=data_op.dtype, auto_run=False)
         self.get_spec_rad(extra_factor=1.1)
 
     def _op_method(self, data, *args, **kwargs):
