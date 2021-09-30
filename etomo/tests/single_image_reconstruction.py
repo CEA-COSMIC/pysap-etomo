@@ -11,7 +11,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from etomo.operators import Radon2D, WaveletPywt, HOTV
-from etomo.reconstructors.forwardradon import TomoReconstructor
+from etomo.reconstructors.forwardtomo import TomoReconstructor
 
 # Loading input data
 image = get_sample_data('2d-mri')

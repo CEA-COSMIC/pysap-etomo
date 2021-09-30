@@ -12,7 +12,7 @@ from modopt.opt.proximity import SparseThreshold
 
 from etomo.operators.utils import generate_locations_etomo_2D
 from etomo.operators import NFFT, WaveletPywt, HOTV
-from etomo.reconstructors.forwardradon import TomoReconstructor
+from etomo.reconstructors.forwardtomo import TomoReconstructor
 from etomo.operators.fourier.utils import estimate_density_compensation
 
 

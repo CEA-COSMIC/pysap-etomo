@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 from etomo.operators.utils import generate_locations_etomo_2D
 from etomo.operators.fourier.utils import estimate_density_compensation
 from etomo.operators import gpuNUFFT, WaveletPywt, HOTV
-from etomo.reconstructors.forwardradon import TomoReconstructor
+from etomo.reconstructors.forwardtomo import TomoReconstructor
 
 
 # Loading input data
