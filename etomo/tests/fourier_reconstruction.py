@@ -12,7 +12,7 @@ from modopt.opt.proximity import SparseThreshold
 
 from etomo.operators.utils import generate_locations_etomo_2D
 from etomo.operators import NFFT, WaveletPywt, HOTV
-from etomo.reconstructors.forwardradon import RadonReconstructor
+from etomo.reconstructors.forwardradon import TomoReconstructor
 from etomo.operators.fourier.utils import estimate_density_compensation
 
 
@@ -31,7 +31,7 @@ wavelet = WaveletPywt(wavelet_name='sym8', nb_scale=3)
 linear_op = TV
 
 regularizer_op = SparseThreshold(linear=Identity(), weights=3e-6)
-reconstructor = RadonReconstructor(
+reconstructor = TomoReconstructor(
     data_op=fourier_op,
     linear_op=linear_op,
     regularizer_op=regularizer_op,

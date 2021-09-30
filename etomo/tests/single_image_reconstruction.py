@@ -11,7 +11,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from etomo.operators import Radon2D, WaveletPywt, HOTV
-from etomo.reconstructors.forwardradon import RadonReconstructor
+from etomo.reconstructors.forwardradon import TomoReconstructor
 
 # Loading input data
 image = get_sample_data('2d-mri')
@@ -26,10 +26,10 @@ data = radon_op.op(image)
 # be given will already be in the linear operator's image space
 TV = HOTV(img_shape=image.shape, order=1)
 wavelet = WaveletPywt(wavelet_name='sym8', nb_scale=3)
-linear_op = wavelet
+linear_op = TV
 
 regularizer_op = SparseThreshold(linear=Identity(), weights=2e-6)
-reconstructor = RadonReconstructor(
+reconstructor = TomoReconstructor(
     data_op=radon_op,
     linear_op=linear_op,
     regularizer_op=regularizer_op,

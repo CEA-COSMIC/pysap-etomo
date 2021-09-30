@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 from etomo.operators.utils import generate_locations_etomo_2D
 from etomo.operators.fourier.utils import estimate_density_compensation
 from etomo.operators import gpuNUFFT, WaveletPywt, HOTV
-from etomo.reconstructors.forwardradon import RadonReconstructor
+from etomo.reconstructors.forwardradon import TomoReconstructor
 
 
 # Loading input data
@@ -34,7 +34,7 @@ wavelet = WaveletPywt(wavelet_name='sym8', nb_scale=3)
 linear_op = TV
 
 regularizer_op = SparseThreshold(linear=Identity(), weights=5e-9)
-reconstructor = RadonReconstructor(
+reconstructor = TomoReconstructor(
     data_op=fourier_op,
     linear_op=linear_op,
     regularizer_op=regularizer_op,
