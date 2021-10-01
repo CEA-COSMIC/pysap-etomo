@@ -69,7 +69,8 @@ def fista(gradient_op, linear_op, prox_op, cost_op,
 
     # Define the initial primal and dual solutions
     if x_init is None:
-        x_init = np.zeros(gradient_op.data_op.shape, dtype=float)
+        x_init = np.zeros(gradient_op.data_op.shape,
+                          dtype=gradient_op.data_op.dtype)
     alpha_init = linear_op.op(x_init)
 
     # Welcome message
@@ -178,8 +179,8 @@ def pogm(gradient_op, linear_op, prox_op, cost_op=None,
     # Define the initial values
     im_shape = gradient_op.data_op.shape
     if x_init is None:
-        alpha_init = linear_op.op(np.squeeze(np.zeros(im_shape,
-                                                      dtype=float)))
+        alpha_init = linear_op.op(np.squeeze(
+            np.zeros(im_shape, dtype=gradient_op.data_op.dtype)))
     else:
         alpha_init = linear_op.op(x_init)
 

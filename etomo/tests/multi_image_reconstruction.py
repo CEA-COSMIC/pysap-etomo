@@ -10,7 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from etomo.operators import Radon2D, WaveletPywt, HOTV
-from etomo.reconstructors.forwardradon import RadonReconstructor
+from etomo.reconstructors.forwardtomo import TomoReconstructor
 
 # Loading input data
 image = get_sample_data('2d-pmri')
@@ -28,7 +28,7 @@ wavelet = WaveletPywt(wavelet_name='sym8', nb_scale=3, n_channels=n_channels)
 linear_op = wavelet
 
 regularizer_op = GroupLASSO(weights=1e-7)
-reconstructor = RadonReconstructor(
+reconstructor = TomoReconstructor(
     data_op=radon_op,
     linear_op=linear_op,
     regularizer_op=regularizer_op,

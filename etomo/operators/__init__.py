@@ -13,3 +13,4 @@
 from .radon.radon import Radon2D, Radon3D
 from .gradient.gradient import GradAnalysis, GradSynthesis
 from .linear import HOTV, HOTV_3D, WaveletPywt
+from .fourier.fourier import NFFT, NUFFT2, gpuNUFFT

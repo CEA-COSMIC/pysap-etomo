@@ -11,3 +11,5 @@
 """
 from ..linear.utils import flatten_swtn, unflatten_swtn, flatten_wave, \
     unflatten_wave
+from ..fourier.utils import generate_locations_etomo_2D, \
+    generate_kspace_etomo_2D

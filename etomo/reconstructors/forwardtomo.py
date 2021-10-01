@@ -15,7 +15,7 @@ from .base import ReconstructorBase
 from ..operators import GradSynthesis, GradAnalysis, WaveletPywt
 
 
-class RadonReconstructor(ReconstructorBase):
+class TomoReconstructor(ReconstructorBase):
     """ This class implements the Single channel MR image Reconstruction.
 
     Notes
