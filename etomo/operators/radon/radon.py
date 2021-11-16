@@ -176,7 +176,8 @@ class Radon3D(RadonBase):
     Radon operator based on Astra Toolbox
     """
 
-    def __init__(self, angles, img_size, n_channels=1, normalized=True):
+    def __init__(self, angles, img_size, nb_slices=None, n_channels=1,
+                 normalized=True):
         """
         Initializes operator
 
@@ -191,10 +192,12 @@ class Radon3D(RadonBase):
         normalized: bool, default True
             tells if the operator is normalized or not.
         """
-        self.dtype = float
+        if nb_slices is None:
+            nb_slices = img_size
         self.n_coils = n_channels
+        self.dtype = float
         self.img_size = img_size
-        self.shape = (img_size,) * 3
+        self.shape = (nb_slices, img_size, img_size)
         if self.n_coils != 1:
             self.shape = (self.n_coils,) + self.shape
         self.angles = angles
@@ -203,9 +206,9 @@ class Radon3D(RadonBase):
 
         # Astra projector
         self.proj_geom = astra.create_proj_geom('parallel3d', 1.0, 1.0,
-                                                img_size, img_size,
+                                                nb_slices, img_size,
                                                 np.deg2rad(self.angles))
-        self.vol_geom = astra.create_vol_geom(img_size, img_size, img_size)
+        self.vol_geom = astra.create_vol_geom(img_size, img_size, nb_slices)
 
         self.sino = astra.create_sino3d_gpu
         self.back_projection = astra.creators.create_backprojection3d_gpu
@@ -214,7 +217,7 @@ class Radon3D(RadonBase):
         """
         Computes sino of a single image
         """
-        return self.sino(data=np.array(img), proj_geom=self.proj_geom,
+        return self.sino(data=img, proj_geom=self.proj_geom,
                          vol_geom=self.vol_geom)[1] / self.norm_const
 
     def op(self, img):
@@ -242,7 +245,7 @@ class Radon3D(RadonBase):
         """
         Computes back projection of single set of coefficients
         """
-        return self.back_projection(data=np.array(x),
+        return self.back_projection(data=x,
                                     proj_geom=self.proj_geom,
                                     vol_geom=self.vol_geom)[1] / self.norm_const
 
