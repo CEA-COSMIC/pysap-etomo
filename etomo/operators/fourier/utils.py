@@ -1,5 +1,6 @@
 """
-Functions to transform data from radon space to fourier space
+Functions to transform data from radon space to fourier space (only in 2D for
+now). Density compensation taken from pysap-mri.
 """
 import numpy as np
 import scipy.fftpack as pfft
@@ -68,6 +69,7 @@ def generate_kspace_etomo_2D(sinogram):
 def estimate_density_compensation(kspace_loc, volume_shape, num_iterations=10):
     """ Utils function to obtain the density compensator for a
     given set of kspace locations.
+
     Parameters
     ----------
     kspace_loc: np.ndarray

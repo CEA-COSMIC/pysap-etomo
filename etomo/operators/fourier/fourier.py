@@ -3,23 +3,18 @@ These operators are not necessary as the reconstruction is faster and more
 direct with Radon operator, but they can be used to compare CS with ML
 approaches as it is easier to find an implementation of fourier transform in
 tensorflow than an implementation of the Radon transform
+gpuNUFFT is taken directly from pysap-mri
 """
 import warnings
 import numpy as np
 
 PYNUFFT_AVAILABLE = True
-PYNFFT_AVAILABLE = True
 GPUNUFFT_AVAILABLE = True
 try:
     import pynufft
 except ImportError:
     PYNUFFT_AVAILABLE = False
     warnings.warn('pynufft not installed')
-try:
-    import pynfft
-except ImportError:
-    PYNFFT_AVAILABLE = False
-    warnings.warn('pynfft not installed')
 try:
     from gpuNUFFT import NUFFTOp
 except ImportError:
@@ -116,86 +111,6 @@ class NUFFT2(FourierBase):
         """
         return np.real(self.plan.adjoint(x)) * np.prod(self.plan.Kd) / \
                self.norm_const
-
-
-class NFFT(FourierBase):
-    """ ND non catesian Fast Fourrier Transform class
-    The NFFT will normalize like the FFT i.e. in a symetric way.
-    This means that both direct and adjoint operator will be divided by the
-    square root of the number of samples in the fourier domain.
-
-    Attributes
-    ----------
-    samples: np.ndarray((m' * n', 3))
-        samples coordinates in the Fourier domain.
-    shape: tuple of int
-        shape of the final reconstructed image (m, n) (not necessarily a
-        square matrix).
-    normalized: bool, default False
-        tells if operator is normalized or not.
-    """
-
-    def __init__(self, samples, shape, normalized=True):
-        """ Initilize the 'NFFT' class.
-
-        Parameters
-        ----------
-        samples: np.ndarray((m' * n', 3))
-            samples coordinates in the Fourier domain.
-        shape: tuple of int
-            shape of the final reconstructed image (m, n) (not necessarily a
-            square matrix).
-        normalized: bool, default False
-            tells if operator is normalized or not.
-        """
-        self.dtype = "complex128"
-        if not PYNFFT_AVAILABLE:
-            raise ValueError('pynfft is not installed. Please install it or '
-                             'use pynufft instead.')
-        if samples.shape[-1] != len(shape):
-            raise ValueError("Samples and Shape dimension doesn't correspond")
-        self.samples = samples
-
-        self.plan = pynfft.NFFT(N=shape, M=len(samples), )
-        self.plan.x = self.samples
-        self.plan.precompute()
-        self.shape = shape
-        self.normalized = normalized
-        self.norm_const = np.sqrt(self.plan.M) if normalized else 1
-
-    def op(self, img):
-        """ This method calculates the masked non-cartesian Fourier transform
-        of a 2-D image.
-
-        Parameters
-        ----------
-        img: np.ndarray((m, n))
-            input 2D array with the same shape as the mask.
-
-        Returns
-        -------
-        x: np.ndarray((m * n))
-            masked Fourier transform of the input image.
-        """
-        self.plan.f_hat = img
-        return np.copy(self.plan.trafo()) / self.norm_const
-
-    def adj_op(self, x):
-        """ This method calculates the adjoint non-cartesian Fourier
-        transform of a 2-D coefficients array.
-
-        Parameters
-        ----------
-        x: np.ndarray((m' * n'))
-            masked non-cartesian Fourier transform 2D data.
-
-        Returns
-        -------
-        img: np.ndarray((m, n))
-            adjoint 2D discrete Fourier transform of the input coefficients.
-        """
-        self.plan.f = x
-        return np.copy(self.plan.adjoint()) / self.norm_const
 
 
 class gpuNUFFT(FourierBase):
