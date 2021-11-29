@@ -3,9 +3,6 @@ Radon operator based on Astra Toolbox
 """
 import numpy as np
 from joblib import Parallel, delayed
-
-#PATH = '/home/300.86-METRO_CARAC/PYTHON/miniconda3/lib/python3.7/site-packages'
-#sys.path.append(PATH)
 import astra
 
 
