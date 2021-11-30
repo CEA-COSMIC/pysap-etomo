@@ -184,6 +184,8 @@ class Radon3D(RadonBase):
             angles acquired (in degrees)
         img_size: int
             size of the images (only square images)
+        nb_slices: int, optional
+            Number of slices. If None, assumes equal to img_size
         n_channels: int, default 1
             Number of images for multichannel reconstructions
         normalized: bool, default True
