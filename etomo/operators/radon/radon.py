@@ -73,6 +73,11 @@ class Radon2D(RadonBase):
         gpu: bool, default False
             use cuda implementation if True
         """
+        if not ASTRA_AVAILABLE:
+            raise ValueError(
+                'astra-toolbox is not installed, this package must be '
+                + 'installed to use this class.'
+            )
         self.dtype = float
         self.n_coils = n_channels
         self.img_size = img_size
@@ -204,6 +209,11 @@ class Radon3D(RadonBase):
         normalized: bool, default True
             tells if the operator is normalized or not.
         """
+        if not ASTRA_AVAILABLE:
+            raise ValueError(
+                'astra-toolbox is not installed, this package must be '
+                + 'installed to use this class.'
+            )
         if nb_slices is None:
             nb_slices = img_size
         self.n_coils = n_channels
