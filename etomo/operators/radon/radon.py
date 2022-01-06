@@ -1,9 +1,15 @@
 """
 Radon operator based on Astra Toolbox
 """
+import warnings
 import numpy as np
 from joblib import Parallel, delayed
-import astra
+ASTRA_AVAILABLE = True
+try:
+    import astra
+except ImportError:
+    ASTRA_AVAILABLE = False
+    warnings.warn('astra not installed')
 
 
 class RadonBase:
@@ -67,6 +73,11 @@ class Radon2D(RadonBase):
         gpu: bool, default False
             use cuda implementation if True
         """
+        if not ASTRA_AVAILABLE:
+            raise ValueError(
+                'astra-toolbox is not installed, this package must be '
+                + 'installed to use this class.'
+            )
         self.dtype = float
         self.n_coils = n_channels
         self.img_size = img_size
@@ -90,8 +101,10 @@ class Radon2D(RadonBase):
         """
         Computes sino of single image
         """
-        return astra.create_sino(data=np.array(img), proj_id=self.proj_id)[1] \
-               / self.norm_const
+        return (
+            astra.create_sino(data=np.array(img), proj_id=self.proj_id)[1]
+            / self.norm_const
+        )
 
     def op(self, img):
         """
@@ -130,9 +143,13 @@ class Radon2D(RadonBase):
         """
         Computes backprojection of single set of coefficients
         """
-        return astra.creators.create_backprojection(data=np.array(x),
-                                                    proj_id=self.proj_id)[1] \
-               / self.norm_const
+        return (
+            astra.creators.create_backprojection(
+                data=np.array(x),
+                proj_id=self.proj_id
+            )[1]
+            / self.norm_const
+        )
 
     def adj_op(self, x):
         """
@@ -164,8 +181,9 @@ class Radon2D(RadonBase):
             ))
         # gpu multichannel
         else:
-            return np.asarray([self._adj_op(x[i]) for i in range(
-                self.n_coils)])
+            return np.asarray(
+                [self._adj_op(x[i]) for i in range(self.n_coils)]
+            )
 
 
 class Radon3D(RadonBase):
@@ -191,6 +209,11 @@ class Radon3D(RadonBase):
         normalized: bool, default True
             tells if the operator is normalized or not.
         """
+        if not ASTRA_AVAILABLE:
+            raise ValueError(
+                'astra-toolbox is not installed, this package must be '
+                + 'installed to use this class.'
+            )
         if nb_slices is None:
             nb_slices = img_size
         self.n_coils = n_channels
@@ -244,9 +267,11 @@ class Radon3D(RadonBase):
         """
         Computes back projection of single set of coefficients
         """
-        return self.back_projection(data=x,
-                                    proj_geom=self.proj_geom,
-                                    vol_geom=self.vol_geom)[1] / self.norm_const
+        return self.back_projection(
+            data=x,
+            proj_geom=self.proj_geom,
+            vol_geom=self.vol_geom
+        )[1] / self.norm_const
 
     def adj_op(self, x):
         """
@@ -265,5 +290,6 @@ class Radon3D(RadonBase):
         if self.n_coils == 1:
             return self._adj_op(x)
         else:
-            return np.asarray([self._adj_op(x[i]) for i in range(
-                self.n_coils)])
+            return np.asarray(
+                [self._adj_op(x[i]) for i in range(self.n_coils)]
+            )

@@ -52,7 +52,6 @@ setup(
         "progressbar2>=3.34.3",
         "joblib",
         "scipy>=1.3.0",
-        "pynfft2>=1.3.3",
         "scikit-image",
     ],
     tests_require=['pytest>=5.0.1', 'pytest-cov>=2.7.1', 'pytest-pep8', 'pytest-runner'],

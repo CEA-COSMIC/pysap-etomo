@@ -68,7 +68,7 @@ class NUFFT2(FourierBase):
                              'use pynfft instead.')
         self.n_coils = 1
         self.dim = samples.shape[1]
-        self.plan = pynufft.NUFFT_cpu()
+        self.plan = pynufft.NUFFT()
         shape_fourier = []
         for dim_size in shape:
             shape_fourier.append(int(2 * dim_size))
