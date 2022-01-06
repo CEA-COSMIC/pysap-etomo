@@ -112,7 +112,7 @@ class Radon2D(RadonBase):
             return self._op(img)
         # Multithreading for cpu multichannel
         elif self.implementation != 'cuda':
-            return Parallel(
+            return np.array(Parallel(
                 n_jobs=4,
                 backend='threading',
                 verbose=False
@@ -120,7 +120,7 @@ class Radon2D(RadonBase):
                 delayed(self._op)
                 (img[i])
                 for i in np.arange(self.n_coils)
-            )
+            ))
         # gpu multichannel
         else:
             return np.asarray([self._op(img[i]) for i in range(
@@ -153,7 +153,7 @@ class Radon2D(RadonBase):
             return self._adj_op(x)
         # Multithreading for cpu multichannel
         elif self.implementation != 'cuda':
-            return Parallel(
+            return np.array(Parallel(
                 n_jobs=4,
                 backend='threading',
                 verbose=False
@@ -161,7 +161,7 @@ class Radon2D(RadonBase):
                 delayed(self._adj_op)
                 (x[i])
                 for i in np.arange(self.n_coils)
-            )
+            ))
         # gpu multichannel
         else:
             return np.asarray([self._adj_op(x[i]) for i in range(
