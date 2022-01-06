@@ -2,22 +2,11 @@ import unittest
 import numpy as np
 
 from etomo.operators import Radon2D, Radon3D
-
-try:
-    import astra
-except ImportError:
-    import_astra = False
-else:
-    import_astra = True
-try:
-    import gpuNUFFT
-except ImportError:
-    use_gpu = False
-else:
-    use_gpu = True
+from etomo.operators.fourier.fourier import GPUNUFFT_AVAILABLE
+from etomo.operators.radon.radon import ASTRA_AVAILABLE
 
 
-@unittest.skipUnless(import_astra, 'Astra not installed.')
+@unittest.skipUnless(ASTRA_AVAILABLE, 'Astra not installed.')
 class RadonTestCase(unittest.TestCase):
     """
     Computes <R.x,y> and <x,Rt.y> for random x and y for each operator and
@@ -66,9 +55,9 @@ class RadonTestCase(unittest.TestCase):
             # Check if <R.x,y> == <x,Rt.y>
             Rxy = np.sum(radon_op.op(fake_data) * fake_adjoint_data)
             xRty = np.sum(fake_data * radon_op.adj_op(fake_adjoint_data))
-            self.assertTrue(np.allclose(Rxy, xRty, rtol=1e-4))
+            self.assertTrue(np.allclose(Rxy, xRty, rtol=1e-3))
 
-    @unittest.skipUnless(use_gpu, 'GPU not available.')
+    @unittest.skipUnless(GPUNUFFT_AVAILABLE, 'GPU not available.')
     def test2D_gpu(self):
         """
         Tests adjoint operator of 2D operator
@@ -94,7 +83,7 @@ class RadonTestCase(unittest.TestCase):
             xRty = np.sum(fake_data * radon_op.adj_op(fake_adjoint_data))
             self.assertTrue(np.allclose(Rxy, xRty, rtol=1e-4))
 
-    @unittest.skipUnless(use_gpu, 'GPU not available.')
+    @unittest.skipUnless(GPUNUFFT_AVAILABLE, 'GPU not available.')
     def test3D(self):
         """
         Tests adjoint operator of 2D operator

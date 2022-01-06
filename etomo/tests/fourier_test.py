@@ -2,19 +2,8 @@ import unittest
 import numpy as np
 from etomo.operators import NUFFT2, gpuNUFFT
 from etomo.operators.utils import generate_locations_etomo_2D
-
-try:
-    import pynufft
-except ImportError:
-    import_pynufft = False
-else:
-    import_pynufft = True
-try:
-    import gpuNUFFT
-except ImportError:
-    use_gpu = False
-else:
-    use_gpu = True
+from etomo.operators.fourier.fourier import PYNUFFT_AVAILABLE
+from etomo.operators.fourier.fourier import GPUNUFFT_AVAILABLE
 
 
 class FourierTestCase(unittest.TestCase):
@@ -37,7 +26,7 @@ class FourierTestCase(unittest.TestCase):
             nb_proj * int(np.sqrt(2) * self.img_size)
         )
 
-    @unittest.skipUnless(import_pynufft, 'PyNUFFT not installed.')
+    @unittest.skipUnless(PYNUFFT_AVAILABLE, 'PyNUFFT not installed.')
     def test2D_cpu(self):
         """
         Tests adjoint operator of 2D operator
@@ -51,7 +40,7 @@ class FourierTestCase(unittest.TestCase):
         )
         self.assertTrue(np.allclose(Fxy, xFty, rtol=1e-6))
 
-    @unittest.skipUnless(use_gpu, 'GPU not available.')
+    @unittest.skipUnless(GPUNUFFT_AVAILABLE, 'GPU not available.')
     def test2D_gpu(self):
         """
         Tests adjoint operator of 2D operator
