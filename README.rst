@@ -37,19 +37,11 @@ The current version of pysap-etomo contains 2D and 3D implementations of:
 Installation instructions
 =========================
 
-Install python-pySAP using:
+As of v0.0.6 of pysap, this plugin can be installed via
 
-``pip install python-pysap``
+``pip install pysap --nosparse2D --only=pysap-etomo``
 
-This will install pysap and its current plugins (except pysapp-etomo).
-
-To install pysap-etomo, clone the repository or download it locally with the
-following command:
-
-``git clone https://github.com/CEA-COSMIC/pysap-etomo.git``
-
-``python setup.py install``
-
+The ``--nosparse2D`` option is not mandatory, but the C++ Sparse2D library is not used in this plugin.
 
 Special Installations
 =====================
