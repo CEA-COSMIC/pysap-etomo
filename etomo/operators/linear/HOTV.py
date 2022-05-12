@@ -116,8 +116,8 @@ class HOTV_3D(LinearBase):
             self.filter[k] = (-1) ** (order - k) * scipy.special.binom(order, k)
 
         offsets_x = np.arange(order + 1)
-        offsets_y = self.nb_slices * np.arange(order + 1)
-        offsets_z = (self.img_size * self.nb_slices) * np.arange(order + 1)
+        offsets_y = self.img_size * np.arange(order + 1)
+        offsets_z = (self.img_size * self.img_size) * np.arange(order + 1)
         shape = ((self.img_size ** 2) * self.nb_slices,) * 2
         sparse_mat_x = scipy.sparse.diags(self.filter,
                                           offsets=offsets_x, shape=shape)
@@ -136,12 +136,12 @@ class HOTV_3D(LinearBase):
 
         Parameters
         ----------
-        data: np.ndarray((m', m', p'))
+        data: np.ndarray((p', m', m'))
             input 3D data array.
 
         Returns
         -------
-        coeffs: np.ndarray((3 * m' * m' * p'))
+        coeffs: np.ndarray((3 * p'* m' * m'))
             the variation values.
         """
         return self.op_matrix * (data.flatten())
@@ -153,16 +153,16 @@ class HOTV_3D(LinearBase):
 
         Parameters
         ----------
-        coeffs: np.ndarray((3 * m' * m' * p'))
+        coeffs: np.ndarray((3 * p' * m' * m'))
             the HOTV coefficients.
 
         Returns
         -------
-        data: np.ndarray((m', m', p'))
+        data: np.ndarray((p', m', m'))
             the reconstructed data.
         """
         return np.reshape(self.op_matrix.T * coeffs,
-                          (self.img_size, self.img_size, self.nb_slices))
+                          (self.nb_slices, self.img_size, self.img_size))
 
     def __str__(self):
         return ('HOTV order ' + str(self.order))
