@@ -79,6 +79,12 @@ class HOTV(LinearBase):
         return np.reshape(self.op_matrix.T * coeffs,
                           (self.img_size, self.img_size))
 
+    def l2norm(self, *args):
+        """
+        L2 norm can be computed analytically
+        """
+        return np.sqrt(2 * np.sum(self.filter ** 2))
+
     def __str__(self):
         return ('HOTV, order ' + str(self.order))
 
@@ -141,7 +147,7 @@ class HOTV_3D(LinearBase):
 
         Returns
         -------
-        coeffs: np.ndarray((3 * p'* m' * m'))
+        coeffs: np.ndarray((3 * p' * m' * m'))
             the variation values.
         """
         return self.op_matrix * (data.flatten())
@@ -163,6 +169,12 @@ class HOTV_3D(LinearBase):
         """
         return np.reshape(self.op_matrix.T * coeffs,
                           (self.nb_slices, self.img_size, self.img_size))
+
+    def l2norm(self, *args):
+        """
+        L2 norm can be computed analytically
+        """
+        return np.sqrt(3 * np.sum(self.filter ** 2))
 
     def __str__(self):
         return ('HOTV order ' + str(self.order))
