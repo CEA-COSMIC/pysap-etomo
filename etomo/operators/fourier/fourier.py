@@ -40,9 +40,9 @@ class NUFFT2(FourierBase):
 
     Attributes
     ----------
-    samples: np.ndarray((m' * n, 2))
+    samples: numpy.ndarray((m' * n, 2))
         samples coordinates in the Fourier domain.
-    shape: tuple of int
+    shape: tuple(int)
         shape of the final reconstructed image (m, n) (not necessarily a
         square matrix).
     normalized: bool, default False
@@ -54,9 +54,9 @@ class NUFFT2(FourierBase):
 
         Parameters
         ----------
-        samples: np.ndarray((m' * n', 3))
+        samples: numpy.ndarray((m' * n', 3))
             samples coordinates in the Fourier domain.
-        shape: tuple of int
+        shape: tuple(int)
             shape of the final reconstructed image (m, n) (not necessarily a
             square matrix).
         normalized: bool, default False
@@ -85,12 +85,12 @@ class NUFFT2(FourierBase):
 
         Parameters
         ----------
-        img: np.ndarray((m, n))
+        img: numpy.ndarray((m, n))
             input 2D array with the same shape as the mask.
 
         Returns
         -------
-        x: np.ndarray((m * n))
+        x: numpy.ndarray((m * n))
             masked Fourier transform of the input image.
         """
         return np.real(self.plan.forward(img)) / self.norm_const
@@ -101,12 +101,12 @@ class NUFFT2(FourierBase):
 
         Parameters
         ----------
-        x: np.ndarray((m' * n'))
+        x: numpy.ndarray((m' * n'))
             masked non-cartesian Fourier transform 2D data.
 
         Returns
         -------
-        img: np.ndarray((m, n))
+        img: numpy.ndarray((m, n))
             adjoint 2D discrete Fourier transform of the input coefficients.
         """
         return np.real(self.plan.adjoint(x)) * np.prod(self.plan.Kd) / \
@@ -117,13 +117,13 @@ class gpuNUFFT(FourierBase):
     """  GPU implementation of N-D non uniform Fast Fourrier Transform class.
     Attributes
     ----------
-    samples: np.ndarray
+    samples: numpy.ndarray
         the normalized kspace location values in the Fourier domain.
-    shape: tuple of int
+    shape: tuple(int)
         shape of the image
-    operator: The NUFFTOp object
+    operator: NUFFTOp object
         to carry out operation
-    n_coils: int default 1
+    n_coils: int, default 1
             Number of coils used to acquire the signal in case of multiarray
             receiver coils acquisition. If n_coils > 1, please organize data as
             n_coils X data_per_coil
@@ -134,21 +134,21 @@ class gpuNUFFT(FourierBase):
         """ Initilize the 'NUFFT' class.
         Parameters
         ----------
-        samples: np.ndarray
+        samples: numpy.ndarray
             the kspace sample locations in the Fourier domain,
             normalized between -0.5 and 0.5
-        shape: tuple of int
+        shape: tuple(int)
             shape of the image
-        density_comp: np.ndarray default None.
+        density_comp: numpy.ndarray, default None.
             k-space weighting, density compensation, if not specified
             equal weightage is given.
-        kernel_width: int default 3
+        kernel_width: int, default 3
             interpolation kernel width (usually 3 to 7)
-        sector_width: int default 8
+        sector_width: int, default 8
             sector width to use
-        osf: int default 2
+        osf: int, default 2
             oversampling factor (usually between 1 and 2)
-        balance_workload: bool default True
+        balance_workload: bool, default True
             whether the workloads need to be balanced
         """
         self.dtype = "complex128"
@@ -184,14 +184,14 @@ class gpuNUFFT(FourierBase):
         of a 2D / 3D image.
         Parameters
         ----------
-        image: np.ndarray
+        image: numpy.ndarray
             input array with the same shape as shape.
         interpolate_data: bool, default False
             if set to True, the image is just apodized and interpolated to
             kspace locations. This is used for density estimation.
         Returns
         -------
-        np.ndarray
+        numpy.ndarray
             Non Uniform Fourier transform of the input image.
         """
         coeff = self.operator.op(
@@ -209,14 +209,14 @@ class gpuNUFFT(FourierBase):
         transform of a 1-D coefficients array.
         Parameters
         ----------
-        coeff: np.ndarray
+        coeff: numpy.ndarray
             masked non-uniform Fourier transform 1D data.
         grid_data: bool, default False
             if True, the kspace data is gridded and returned,
             this is used for density compensation
         Returns
         -------
-        np.ndarray
+        numpy.ndarray
             adjoint operator of Non Uniform Fourier transform of the
             input coefficients.
         """
