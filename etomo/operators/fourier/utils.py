@@ -14,12 +14,12 @@ def generate_locations_etomo_2D(size_x, angles):
     ----------
     size_x: int
         image size along the x-axis
-    angles: np.ndarray((q))
+    angles: numpy.ndarray(q)
         array countaining the acquisition angles
 
     Returns
     -------
-    samples: np.ndarray((size_x * q, 2))
+    samples: numpy.ndarray((size_x * q, 2))
         Fourier space locations generated from the given angles and data image
         size
    """
@@ -43,12 +43,12 @@ def generate_kspace_etomo_2D(sinogram):
 
     Parameters
     ----------
-    sinogram: np.ndarray((q, m))
+    sinogram: numpy.ndarray((q, m))
         sinogram with size nb_angles and size_x (m)
 
     Returns
     -------
-    kspace_obs: np.ndarray((q*int(m*sqrt(2)))
+    kspace_obs: numpy.ndarray((q*int(m*sqrt(2)))
         Fourier space values from the given sinogram
     """
     nb_angles, size_x = sinogram.shape
@@ -72,11 +72,11 @@ def estimate_density_compensation(kspace_loc, volume_shape, num_iterations=10):
 
     Parameters
     ----------
-    kspace_loc: np.ndarray
+    kspace_loc: numpy.ndarray
         the kspace locations
-    volume_shape: np.ndarray
+    volume_shape: numpy.ndarray
         the volume shape
-    num_iterations: int default 10
+    num_iterations: int, default 10
         the number of iterations for density estimation
     """
     from .fourier import gpuNUFFT
