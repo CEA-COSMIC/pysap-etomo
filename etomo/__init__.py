@@ -7,6 +7,8 @@
 # for details.
 ##########################################################################
 
-"""
-This module defines all the electron tomography related plugin.
+"""PYSAP-ETOMO.
+
+This plug-in provides tools for electron tomography data processing.
+
 """
