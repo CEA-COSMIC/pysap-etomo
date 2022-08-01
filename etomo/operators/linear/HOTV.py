@@ -18,7 +18,7 @@ class HOTV(LinearBase):
 
         Parameters
         ----------
-        img_shape: tuple of int
+        img_shape: tuple(int)
             image dimensions
         order: int, optional
             order of the differential operator used for the HOTV computation
@@ -51,12 +51,12 @@ class HOTV(LinearBase):
 
         Parameters
         ----------
-        data: np.ndarray((m', m'))
+        data: numpy.ndarray((m', m'))
             input 2D data array.
 
         Returns
         -------
-        coeffs: np.ndarray((2 * m' * m'))
+        coeffs: numpy.ndarray((2 * m' * m'))
             the variation values.
         """
         return self.op_matrix * (data.flatten())
@@ -68,12 +68,12 @@ class HOTV(LinearBase):
 
         Parameters
         ----------
-        coeffs: np.ndarray((2 * m' * m'))
+        coeffs: numpy.ndarray((2 * m' * m'))
             the HOTV coefficients.
 
         Returns
         -------
-        data: np.ndarray((m', m'))
+        data: numpy.ndarray((m', m'))
             the reconstructed data.
         """
         return np.reshape(self.op_matrix.T * coeffs,
@@ -102,7 +102,7 @@ class HOTV_3D(LinearBase):
 
         Parameters
         ----------
-        img_shape: tuple of int
+        img_shape: tuple(int)
             image dimensions (assuming that the image is square)
         nb_slices: int
             number of slices in the 3D reconstructed image
@@ -142,12 +142,12 @@ class HOTV_3D(LinearBase):
 
         Parameters
         ----------
-        data: np.ndarray((p', m', m'))
+        data: numpy.ndarray((p', m', m'))
             input 3D data array.
 
         Returns
         -------
-        coeffs: np.ndarray((3 * p' * m' * m'))
+        coeffs: numpy.ndarray((3 * p' * m' * m'))
             the variation values.
         """
         return self.op_matrix * (data.flatten())
@@ -159,12 +159,12 @@ class HOTV_3D(LinearBase):
 
         Parameters
         ----------
-        coeffs: np.ndarray((3 * p' * m' * m'))
+        coeffs: numpy.ndarray((3 * p' * m' * m'))
             the HOTV coefficients.
 
         Returns
         -------
-        data: np.ndarray((p', m', m'))
+        data: numpy.ndarray((p', m', m'))
             the reconstructed data.
         """
         return np.reshape(self.op_matrix.T * coeffs,
