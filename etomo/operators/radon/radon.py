@@ -23,12 +23,12 @@ class RadonBase:
 
         Parameters
         ----------
-        img: np.array
+        img: numpy.ndarray
             input image
 
         Returns
         -------
-        result: np.array
+        result: numpy.ndarray
             sinogram of img
         """
         raise NotImplementedError('op not implemented')
@@ -39,12 +39,12 @@ class RadonBase:
 
         Parameters
         ----------
-        x: np.array
+        x: numpy.ndarray
             input sinogram
 
         Returns
         -------
-        result: np.array
+        result: numpy.ndarray
             back projection of x
         """
         raise NotImplementedError('adj_op not implemented')
@@ -62,7 +62,7 @@ class Radon2D(RadonBase):
 
         Parameters
         ----------
-        angles: np.array
+        angles: numpy.ndarray
             angles acquired (in degrees)
         img_size: int
             size of the images (only square images)
@@ -112,12 +112,12 @@ class Radon2D(RadonBase):
 
         Parameters
         ----------
-        img: np.array of size ((nchannels,) img_size, img_size)
+        img: numpy.ndarray((nchannels,) img_size, img_size)
             input image
 
         Returns
         -------
-        sinogram: np.array of size ((n_channels,) len(theta), img_size)
+        sinogram: np.array((n_channels,) len(theta), img_size)
             sinogram of the image
         """
         # Single channel
@@ -157,12 +157,12 @@ class Radon2D(RadonBase):
 
         Parameters
         ----------
-        x: np.array of size ((n_channels,) len(theta), img_size)
+        x: numpy.ndarray((n_channels,) len(theta), img_size)
             sinogram
 
         Returns
         -------
-        img: np.array of size ((n_channels,) img_size, img_size)
+        img: numpy.ndarray((n_channels,) img_size, img_size)
             the backprojection
         """
         # Single channel
@@ -198,7 +198,7 @@ class Radon3D(RadonBase):
 
         Parameters
         ----------
-        angles: np.array
+        angles: numpy.ndarray
             angles acquired (in degrees)
         img_size: int
             size of the images (only square images)
@@ -248,13 +248,12 @@ class Radon3D(RadonBase):
 
         Parameters
         ----------
-        img: np.array of size ((n_channels,) img_size, img_size, img_size)
+        img: numpy.ndarray((n_channels,) img_size, img_size, img_size)
             input image
 
         Returns
         -------
-        sinogram: np.array of size ((n_channels,) img_size, len(theta),
-                                    img_size,)
+        sinogram: numpy.ndarray((n_channels,) img_size, len(theta), img_size)
             sinogram of the image
         """
         if self.n_coils == 1:
@@ -279,12 +278,12 @@ class Radon3D(RadonBase):
 
         Parameters
         ----------
-        x: np.array of size ((n_channels,) img_size, len(theta), img_size)
+        x: numpy.ndarray((n_channels,) img_size, len(theta), img_size)
             sinogram
 
         Returns
         -------
-        img: np.array of size ((n_channels,) img_size, img_size, img_size)
+        img: numpy.ndarray((n_channels,) img_size, img_size, img_size)
             the backprojection
         """
         if self.n_coils == 1:
