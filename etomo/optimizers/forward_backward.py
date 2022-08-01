@@ -28,39 +28,39 @@ def fista(gradient_op, linear_op, prox_op, cost_op,
 
     Parameters
     ----------
-    gradient_op: instance of class GradBase
+    gradient_op: GradBase
         the gradient operator.
-    linear_op: instance of LinearBase
+    linear_op: LinearBase
         the linear operator: seek the sparsity, ie. a wavelet transform.
-    prox_op: instance of ProximityParent
+    prox_op: ProximityParent
         the proximal operator.
-    cost_op: instance of costObj
+    cost_op: costObj
         the cost function used to check for convergence during the
         optimization.
-    lambda_init: float, (default 1.0)
+    lambda_init: float, default 1.0
         initial value for the FISTA step.
-    max_nb_of_iter: int (optional, default 300)
+    max_nb_of_iter: int, optional, default 300
         the maximum number of iterations in the Condat-Vu proximal-dual
         splitting algorithm.
-    x_init: np.ndarray (optional, default None)
+    x_init: numpy.ndarray, optional, default None
         Inital guess for the image
-    metric_call_period: int (default 5)
+    metric_call_period: int, default 5
         the period on which the metrics are compute.
-    metrics: dict (optional, default None)
+    metrics: dict, optional, default None
         the list of desired convergence metrics: {'metric_name':
         [@metric, metric_parameter]}. See modopt for the metrics API.
-    verbose: int (optional, default 0)
+    verbose: int, optional, default 0
         the verbosity level.
     progress: bool, default True
         triggers progressbar
-    lambda_update_params: dict,
+    lambda_update_params: dict
         Parameters for the lambda update in FISTA mode
 
     Returns
     -------
-    x_final: ndarray
+    x_final: numpy.ndarray
         the estimated FISTA solution.
-    costs: list of float
+    costs: list(float)
         the cost function values.
     metrics: dict
         the requested metrics values during the optimization.
@@ -140,36 +140,36 @@ def pogm(gradient_op, linear_op, prox_op, cost_op=None,
 
     Parameters
     ----------
-    gradient_op: instance of class GradBase
+    gradient_op: GradBase
         the gradient operator.
-    linear_op: instance of LinearBase
+    linear_op: LinearBase
         the linear operator: seek the sparsity, ie. a wavelet transform.
-    prox_op: instance of ProximityParent
+    prox_op: ProximityParent
         the proximal operator.
-    cost_op: instance of costObj, (default None)
+    cost_op: costObj, default None
         the cost function used to check for convergence during the
         optimization.
-    lambda_init: float, (default 1.0)
+    lambda_init: float, default 1.0
         initial value for the FISTA step.
-    max_nb_of_iter: int (optional, default 300)
+    max_nb_of_iter: int, optional, default 300
         the maximum number of iterations in the POGM algorithm.
-    x_init: np.ndarray (optional, default None)
+    x_init: np.ndarray, optional, default None
         the initial guess of image
-    metric_call_period: int (default 5)
+    metric_call_period: int, default 5
         the period on which the metrics are computed.
-    metrics: dict (optional, default None)
+    metrics: dict, optional, default None
         the list of desired convergence metrics: {'metric_name':
         [@metric, metric_parameter]}. See modopt for the metrics API.
-    verbose: int (optional, default 0)
+    verbose: int, optional, default 0
         the verbosity level.
     progress: bool, default True
         triggers progressbar
 
     Returns
     -------
-    x_final: ndarray
+    x_final: numpy.ndarray
         the estimated POGM solution.
-    costs: list of float
+    costs: list(float)
         the cost function values.
     metrics: dict
         the requested metrics values during the optimization.
