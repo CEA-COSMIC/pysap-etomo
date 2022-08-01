@@ -35,13 +35,13 @@ def condatvu(gradient_op, linear_op, dual_regularizer, cost_op,
 
     Parameters
     ----------
-    gradient_op: instance of class GradBase
+    gradient_op: GradBase
         the gradient operator.
-    linear_op: instance of LinearBase
+    linear_op: LinearBase
         the linear operator: seek the sparsity, ie. a wavelet transform.
-    dual_regularizer: instance of ProximityParent
+    dual_regularizer: ProximityParent
         the  dual regularization operator
-    cost_op: instance of costObj
+    cost_op: costObj
         the cost function used to check for convergence during the
         optimization.
     max_nb_of_iter: int, default 150
@@ -53,7 +53,7 @@ def condatvu(gradient_op, linear_op, dual_regularizer, cost_op,
     relaxation_factor: float, default 0.5
         parameter of the Condat-Vu proximal-dual splitting algorithm.
         If 1, no relaxation.
-    x_init: np.ndarray (optional, default None)
+    x_init: numpy.ndarray, optional, default None
         the initial guess of image
     add_positivity: bool, default True
         use Positivity instead of Identity for prox
@@ -64,7 +64,7 @@ def condatvu(gradient_op, linear_op, dual_regularizer, cost_op,
         if the standard deviation is not set, estimate this parameter using
         the mad routine in the image ('primal') or in the sparse wavelet
         decomposition ('dual') domain.
-    std_thr: float, default 2.
+    std_thr: float, default 2
         use this treshold expressed as a number of sigma in the residual
         proximity operator during the thresholding.
     relaxation_factor: float, default 0.5
@@ -72,9 +72,9 @@ def condatvu(gradient_op, linear_op, dual_regularizer, cost_op,
         If 1, no relaxation.
     nb_of_reweights: int, default 1
         the number of reweightings.
-    metric_call_period: int (default 5)
+    metric_call_period: int, default 5
         the period on which the metrics are compute.
-    metrics: dict (optional, default None)
+    metrics: dict, optional, default None
         the list of desired convergence metrics: {'metric_name':
         [@metric, metric_parameter]}. See modopt for the metrics API.
     verbose: int, default 0
@@ -84,13 +84,13 @@ def condatvu(gradient_op, linear_op, dual_regularizer, cost_op,
 
     Returns
     -------
-    x_final: ndarray
+    x_final: numpy.ndarray
         the estimated CONDAT-VU solution.
-    costs: list of float
+    costs: list(float)
         the cost function values.
     metrics: dict
         the requested metrics values during the optimization.
-    y_final: ndarrat
+    y_final: numpy.ndarray
         the estimated dual CONDAT-VU solution
     """
     # Check inputs
