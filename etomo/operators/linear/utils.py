@@ -10,14 +10,14 @@ def flatten(x):
 
     Parameters
     ----------
-    x: list of ndarray or ndarray
+    x: numpy.ndarray or list(numpy.ndarray)
         the input dataset.
 
     Returns
     -------
-    y: ndarray 1D
+    y: ndarray
         the flatten input list of array.
-    shape: list of uplet
+    shape: list(tuple)
         the input list of array structure.
     """
     # Check input
@@ -41,14 +41,14 @@ def unflatten(y, shape):
 
     Parameters
     ----------
-    y: ndarray 1D
+    y: numpy.ndarray
         a flattened input array.
-    shape: list of uplet
+    shape: list(tuple)
         the output structure information.
 
     Returns
     -------
-    x: list of ndarray
+    x: numpy.ndarray or list(numpy.ndarray)
         the unflattened dataset.
     """
     # Unflatten the dataset
@@ -68,14 +68,14 @@ def flatten_swtn(x):
 
     Parameters
     ----------
-    x: list of dict or ndarray
+    x: list(dict) or list(numpy.ndarray)
         the input data
 
     Returns
     -------
-    y: ndarray 1D
+    y: numpy.ndarray
         the flatten input list of array.
-    shape: list of dict
+    shape: list(dict)
         the input list of array structure.
     """
     # Check input
@@ -102,14 +102,14 @@ def unflatten_swtn(y, shape):
 
     Parameters
     ----------
-    y: ndarray 1D
+    y: numpy.ndarray
         a flattened input array.
-    shape: list of dict
+    shape: list(dict)
         the output structure information.
 
     Returns
     -------
-    x: list of ndarray
+    x: list(numpy.ndarray)
         the unflattened dataset.
     """
     # Unflatten the dataset
@@ -131,14 +131,14 @@ def flatten_wave(x):
 
     Parameters
     ----------
-    x: list of dict or ndarray
+    x: list(dict) or list(numpy.ndarray)
         the input data
 
     Returns
     -------
-    y: ndarray 1D
+    y: numpy.ndarray
         the flatten input list of array.
-    shape: list of dict
+    shape: list(dict)
         the input list of array structure.
     """
 
@@ -166,14 +166,14 @@ def unflatten_wave(y, shape):
 
     Parameters
     ----------
-    y: ndarray 1D
+    y: numpy.ndarray
         a flattened input array.
-    shape: list of dict
+    shape: list(dict)
         the output structure information.
 
     Returns
     -------
-    x: list of ndarray
+    x: list(numpy.ndarray)
         the unflattened dataset.
     """
     # Unflatten the dataset
