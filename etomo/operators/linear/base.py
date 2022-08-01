@@ -49,12 +49,12 @@ class LinearBase(LinearParent):
 
         Parameters
         ----------
-        data: np.ndarray of size ((n_channels,) (img_size,) img_size, img_size)
+        data: numpy.ndarray
             2D or 3D images to compute operator on.
 
         Returns
         -------
-        coeffs: np.ndarray
+        coeffs: numpy.ndarray
             Linear coefficients of imput images
         """
         if self.n_coils == 1:
@@ -73,12 +73,12 @@ class LinearBase(LinearParent):
 
         Parameters
         ----------
-        coeffs: np.ndarray
+        coeffs: numpy.ndarray
             Linear coefficients
 
         Returns
         -------
-        images: np.ndarray
+        images: numpy.ndarray
             Reconstructed data from imput coefficients
         """
         if self.n_coils == 1:
@@ -93,11 +93,11 @@ class LinearBase(LinearParent):
 
     def l2norm(self, shape):
         """
-        Compute the L2 norm.
+        Compute the L2 norm. Can be overwritten if an analytical formula exists.
 
         Parameters
         ----------
-        shape: tuple of int
+        shape: tuple(int)
             the 2D or 3D data shape.
 
         Returns
