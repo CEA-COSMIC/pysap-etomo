@@ -23,7 +23,7 @@ class WaveletPywt(LinearBase):
             the number of scales in the decomposition.
         undecimated: bool, default False
             enable use undecimated wavelet transform.
-        mode : str or tuple of str, optional
+        mode : str, optional
             Signal extension mode, see :ref:`Modes <ref-modes>`. This can also
             be a tuple containing a mode to apply along each axis in ``axes``.
         kwargs:
@@ -63,12 +63,12 @@ class WaveletPywt(LinearBase):
 
         Parameters
         ----------
-        data: np.ndarray(m', n') or np.ndarray(m', n', p')
+        data: numpy.ndarray(m', n') or numpy.ndarray(m', n', p')
             input 2D or 3D data array.
 
         Returns
         -------
-        coeffs: np.ndarray
+        coeffs: numpy.ndarray
             the wavelet coefficients.
         """
         if self.undecimated:
@@ -91,12 +91,12 @@ class WaveletPywt(LinearBase):
 
         Parameters
         ----------
-        coeffs: np.ndarray
+        coeffs: numpy.ndarray
             the wavelet coefficients.
 
         Returns
         -------
-        data: np.ndarray((m, n)) or np.ndarray((m, n, p))
+        data: numpy.ndarray((m, n)) or numpy.ndarray((m, n, p))
             the 2D or 3D reconstructed data.
         """
         self.coeffs = coeffs
