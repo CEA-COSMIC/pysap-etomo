@@ -11,10 +11,7 @@
 from __future__ import print_function
 import os
 from setuptools import setup, find_packages
-try:
-    from pip._internal.main import main as pip_main
-except:
-    from pip._internal import main as pip_main
+
 
 # Global parameters
 CLASSIFIERS = [
@@ -32,8 +29,6 @@ Patrick Quemere <patrick.quemere@cea.fr>
 """
 # Write setup
 setup_requires = ["numpy>=1.16.4", "cython>=0.27.3", "pytest-runner"]
-
-pip_main(['install'] + setup_requires)
 
 setup(
     name="pysap-etomo",
